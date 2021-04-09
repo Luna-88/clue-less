@@ -1,13 +1,23 @@
 const express = require('express')
+const db = require('../model/db')
 const router = express.Router()
 const investigation = require('../model/investigation')
 
 
-router.get('/:roomId', (request, response) => {
+router.get('/:roomId', async (request, response) => {
     let roomId = request.params.roomId
     try {
-        let room = investigation.findRoomById(roomId)
-        response.send(investigation.inspectRoom(room))    
+        db.getCollection('rooms').then((rooms) => {
+            return rooms.findOne({
+                name: roomId
+            })
+            .then((result) => {
+                response.send(investigation.inspectRoom(result))
+            })
+        })
+        // .then(() => {
+        //     db.close()
+        // })
     }
     catch (error) {
         console.log(error)
