@@ -1,10 +1,10 @@
-const data = require('./model/rooms')
-const rooms = data.rooms
-const questions = data.questions
+const rooms = require('./model/rooms')
+const textFormat = require('./view/textFormat')
 const investigation = require('./model/investigation')
+const roomRoutes = require('./routes/rooms')
 const express = require('express')
 const app = express()
-const textFormat = require('./view/textFormat')
+
 
 app.get('/', (request, response) => {
     response.send(textFormat.paragraphFormat(`Dr Black has been murdered in his mansion while hosting a party to celebrate his 70th birthday. He is famously known for being a cunning lawyer with lots of money and an almost equally amount of enemies.
@@ -14,13 +14,13 @@ app.get('/', (request, response) => {
 )
 
 app.get('/rooms', (request, response) => {
-    response.send(rooms.map(room => room.id).map(item => textFormat.textLink(item,`/rooms/${item}`)).join("\n"))
+    response.send(rooms.roomsList.join('\n'))
 }
 )
 
-rooms.forEach(room => app.get(`/rooms/${room.name}`, (request, response) => {
-    response.send(investigation.inspectRoom(room))
-}))
+app.use('/rooms', roomRoutes)
+
+
 
 // app.get('/questions', (request, response) => {
 //     response.send(JSON.stringify(questions.map(question => question.question).map(item => `<a href='./questions/'>${item}</a>`)))

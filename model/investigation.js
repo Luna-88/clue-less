@@ -1,17 +1,19 @@
+const textFormat = require('../view/textFormat')
 let roomsById = {}
+
 
 function createRoom(id, character, weapon, passage) {
     roomsById[id] = {
         id, 
         character, 
         weapon,
-        passage
+        passage,
     }
 }
 
 
 function findRoomById(id) {
-    let room = rooms[id]
+    let room = roomsById[id]
     if (!room) {
         throw new Error(`Sorry, this mansion doesn't have a ${id}`)
     }
@@ -38,4 +40,4 @@ function inspectRoom(room) {
     }
 }
 
-module.exports = { inspectRoom, createRoom, findRoomById }
+module.exports = { inspectRoom, createRoom, findRoomById, roomsById }

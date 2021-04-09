@@ -1,17 +1,17 @@
-let router = express.Router()
-const data = require('./model/rooms')
-const rooms = data.rooms
+const express = require('express')
+const router = express.Router()
+const investigation = require('../model/investigation')
 
 
 router.get('/:roomId', (request, response) => {
     let roomId = request.params.roomId
     try {
-        let room = rooms.findSceneById(sceneId)
-        res.send(formatSceneAsText(scene, wrapWidth, "http://localhost:3000"))    
+        let room = investigation.findRoomById(roomId)
+        response.send(investigation.inspectRoom(room))    
     }
     catch (error) {
         console.log(error)
-        res.status(404).send("Scene " + sceneId + " not found.\n")
+        response.status(404).send(`Private room, please go back`)
     }
 })
 
