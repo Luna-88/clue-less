@@ -1,7 +1,7 @@
 const express = require('express')
 const db = require('../model/db')
 const router = express.Router()
-const investigation = require('../model/investigation')
+const room = require('../model/rooms')
 
 
 router.get('/:roomId', async (request, response) => {
@@ -12,12 +12,9 @@ router.get('/:roomId', async (request, response) => {
                 name: roomId
             })
             .then((result) => {
-                response.send(investigation.inspectRoom(result))
+                response.send(room.inspectRoom(result))
             })
         })
-        // .then(() => {
-        //     db.close()
-        // })
     }
     catch (error) {
         console.log(error)

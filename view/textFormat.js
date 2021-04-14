@@ -5,7 +5,7 @@ function paragraphFormat(text) {
 }
 
 function textLink(sentence, reference) {
-    return `<h1 style="font-family:calibri; font-size:18px; text-align:justify"><a href=${reference}>${sentence}</a></h1>`
+    return `<body style="font-family:calibri; font-size:18px; text-align:justify"><a href=${reference}>${sentence}</a></body>`
 }
 
 

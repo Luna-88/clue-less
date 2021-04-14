@@ -1,6 +1,5 @@
-const rooms = require('./model/roomList')
+const rooms = require('./model/rooms')
 const textFormat = require('./view/textFormat')
-// const investigation = require('./model/investigation')
 const roomRoutes = require('./routes/rooms')
 const express = require('express')
 const app = express()
@@ -14,7 +13,7 @@ app.get('/', (request, response) => {
 )
 
 app.get('/rooms', (request, response) => {
-    response.send(rooms.roomsList.join('\n'))
+    response.send(textFormat.paragraphFormat(rooms.roomList.join('\n')))
 }
 )
 
