@@ -1,7 +1,8 @@
 const rooms = require('./model/rooms')
 const textFormat = require('./view/textFormat')
-const roomRoutes = require('./routes/rooms')
+const roomRoutes = require('./routes/room')
 const express = require('express')
+const db = require('./model/db')
 const app = express()
 
 
@@ -12,20 +13,18 @@ app.get('/', (request, response) => {
 }
 )
 
-app.get('/rooms', (request, response) => {
-    response.send(textFormat.paragraphFormat(rooms.roomList.join('\n')))
-}
-)
+app.get('/rooms', async (request, response) => {
+    let roomList = await rooms.listRooms()
+    response.send(roomList)
+})
+
 
 app.use('/rooms', roomRoutes)
 
-
-
-// app.get('/questions', (request, response) => {
-//     response.send(JSON.stringify(questions.map(question => question.question).map(item => `<a href='./questions/'>${item}</a>`)))
-// })
-
-
+app.get('/questions', async (request, response) => {
+  let questionList = await rooms.selectQuestion()
+  response.send(questionList)
+})
 
 
 const PORT = process.env.PORT || 3000;
