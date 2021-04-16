@@ -14,12 +14,12 @@ function textLink(sentence, reference) {
     `
 }
 
-function bulletSelection(text, reference) {
+function askButton(text, roomId, reference) {
     return `
-    <form action="http://localhost:3000/questions/${reference}" method="POST">
-        ${paragraphFormat(text)}
-        <input class="button" type="submit" value="Ask" button style="height:30px;width:50px">
-    </form>
+    ${paragraphFormat(text)}
+    <a href="http://localhost:3000/rooms/${roomId}/questions/${reference}">
+    <button style="height:30px;width:50px">Ask</button>
+    </a>
     `
 }
 
@@ -27,6 +27,6 @@ function bulletSelection(text, reference) {
 module.exports = { 
     paragraphFormat, 
     textLink,
-    bulletSelection,
+    askButton,
 }
 

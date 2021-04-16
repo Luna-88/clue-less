@@ -1,18 +1,30 @@
 const express = require('express')
+const roomRouter = express.Router()
+
+
 const db = require('../model/db')
-const router = express.Router()
-const room = require('../model/rooms')
+const rooms = require('../model/rooms')
+const questionRouter = require('./question').questionRouter
 
 
-router.get('/:roomId', async (request, response) => {
+roomRouter.use('/:roomId/questions', questionRouter) //Nesting routes
+
+
+roomRouter.get('/', async (request, response) => {
+    let roomList = await rooms.listRooms()
+    response.send(roomList)
+})
+
+
+roomRouter.get('/:roomId', async (request, response) => {
     let roomId = request.params.roomId
     try {
-        db.getCollection('rooms').then((rooms) => {
-            return rooms.findOne({
+        db.getCollection('rooms').then((room) => {
+            return room.findOne({
                 name: roomId
             })
             .then((result) => {
-                response.send(room.inspectRoom(result))
+                response.send(rooms.inspectRoom(result))
             })
         })
     }
@@ -22,4 +34,7 @@ router.get('/:roomId', async (request, response) => {
     }
 })
 
-module.exports = router
+
+module.exports = {
+    roomRouter
+}
