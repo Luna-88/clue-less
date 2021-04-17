@@ -2,7 +2,7 @@ const express = require('express')
 const introRouter = express.Router()
 
 
-const textFormat = require('../view/textFormat')
+const textFormat = require('../view/textFormats')
 
 
 introRouter.get('/', (request, response) => {
@@ -14,5 +14,5 @@ introRouter.get('/', (request, response) => {
 
 
 module.exports = {
-    introRouter
+    introRouter,
 }

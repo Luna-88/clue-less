@@ -3,7 +3,7 @@ const questionRouter = express.Router({ mergeParams: true })
 
 const db = require('../model/db')
 const questions = require('../model/questions')
-const textFormat = require('../view/textFormat')
+const textFormat = require('../view/textFormats')
 
 
 questionRouter.get('/', async (request, response) => {
@@ -34,5 +34,5 @@ questionRouter.get('/:questionId', async (request, response) => {
 
 
 module.exports = {
-    questionRouter
+    questionRouter,
 }

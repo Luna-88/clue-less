@@ -22,5 +22,5 @@ function close() {
 module.exports = {
     getDb,
     getCollection,
-    close
+    close,
 }

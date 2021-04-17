@@ -36,5 +36,5 @@ roomRouter.get('/:roomId', async (request, response) => {
 
 
 module.exports = {
-    roomRouter
+    roomRouter,
 }

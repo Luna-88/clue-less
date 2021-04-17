@@ -1,4 +1,4 @@
-const textFormat = require('../view/textFormat')
+const textFormat = require('../view/textFormats')
 const db = require('./db')
 let roomList = []
 
@@ -35,15 +35,16 @@ function inspectRoom(room) {
 async function listRooms() {
     roomList = []
     const roomsCollection = await db.getCollection('rooms')
-    await roomsCollection.find({}).project({ "name": 1, "_id": 0 })
+    await roomsCollection.find({})
+        .project({ "name": 1, "_id": 0 })
         .forEach(document => roomList
             .push(textFormat.paragraphFormat(textFormat.textLink(
-                document.name, `/rooms/${document.name}`))))
+            document.name, `/rooms/${document.name}`))))
     return roomList.join('')
 }
 
 
 module.exports = {
     inspectRoom,
-    listRooms
+    listRooms,
 }
