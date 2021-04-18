@@ -21,7 +21,7 @@ roomRouter.get('/:roomId', async (request, response) => {
     try {
         db.getCollection('rooms').then((room) => {
             return room.findOne({
-                name: roomId
+                room: roomId
             })
             .then((result) => {
                 response.send(rooms.inspectRoom(result))

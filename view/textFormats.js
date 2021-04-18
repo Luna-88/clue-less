@@ -16,9 +16,20 @@ function textLink(sentence, reference) {
     `
 }
 
+function textOption(text) {
+    if (text.length > 0) {
+        return `
+        <option value="${text}">${text}</option>
+    `
+    } else {
+        return text = null
+    }
 
-module.exports = { 
-    paragraphFormat, 
+}
+
+module.exports = {
+    paragraphFormat,
     textLink,
+    textOption,
 }
 

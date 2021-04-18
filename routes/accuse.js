@@ -1,5 +1,4 @@
 const express = require('express')
-const { findKiller } = require('../model/accusations')
 const accuseRouter = express.Router()
 
 const db = require('../model/db')
@@ -12,7 +11,8 @@ accuseRouter.use(express.json())
 
 
 accuseRouter.get('/', async (request, response) => {
-    response.send(components.accuseForm())
+    const accuseForm = await components.accuseForm()
+    response.send(accuseForm)
 }
 )
 

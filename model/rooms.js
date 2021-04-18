@@ -4,9 +4,9 @@ let roomList = []
 
 
 function inspectRoom(room) {
-    const enter = `You have entered the ${room.name}...`
+    const enter = `You have entered the ${room.room}...`
     const options = [textFormat.textLink(`
-        Ask a Question`, `http://localhost:3000/rooms/${room.name}/questions`),
+        Ask a Question`, `http://localhost:3000/rooms/${room.room}/questions`),
         `or`,
         textFormat.textLink(`
         Accuse`, `../accuse`)].join(' ')
@@ -36,10 +36,10 @@ async function listRooms() {
     roomList = []
     const roomsCollection = await db.getCollection('rooms')
     await roomsCollection.find({})
-        .project({ "name": 1, "_id": 0 })
+        .project({ "room": 1, "_id": 0 })
         .forEach(document => roomList
             .push(textFormat.paragraphFormat(textFormat.textLink(
-            document.name, `/rooms/${document.name}`))))
+            document.room, `/rooms/${document.room}`))))
     return roomList.join('')
 }
 

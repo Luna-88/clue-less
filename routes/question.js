@@ -19,7 +19,7 @@ questionRouter.get('/:questionId', async (request, response) => {
     try {
         db.getCollection('rooms').then((room) => {
             return room.findOne({
-                name: roomId
+                room: roomId
             })
             .then((answers) => {
                 response.send(textFormat.paragraphFormat(answers.answers[questionId]))

@@ -20,9 +20,10 @@ async function findKiller() {
         .project({ "_id": 0 })
         .forEach(document => currentKiller.push(document))
     if (JSON.stringify(lastAccusation[0]) === JSON.stringify(currentKiller[0])) {
-        return alert(`You have found the killer!!!`)
+        return alert(`You have found the killer!`)
+        
     } else {
-        return alert(`The killer has escaped. Please, try again`)
+        return alert(`Please, try again`)
     }
 }
 
