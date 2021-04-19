@@ -10,7 +10,7 @@ function inspectRoom(room) {
         `or`,
         textFormat.textLink(`
         Accuse`, `../accuse`)].join(' ')
-    const back = textFormat.paragraphFormat(textFormat.textLink(`Go Back`, './'))
+    const back = textFormat.paragraphFormat(textFormat.textLink(`Go Back`, 'http://localhost:3000/rooms'))
     if (room.character.length === 0 && room.weapon.length > 0) {
         return textFormat.paragraphFormat(`${enter}
                 No one is here...
