@@ -6,13 +6,19 @@ questionRouter.use(express.json())
 
 const db = require('../model/db')
 const questions = require('../model/questions')
-const textFormat = require('../view/textFormats')
+const textFormats = require('../view/textFormats')
 
 
 questionRouter.get('/', async (request, response) => {
     const roomId = request.params.roomId
     const questionForm = await questions.questionForm(roomId)
-    response.send(questionForm)
+    try {
+        response.send(questionForm)
+    }
+    catch {
+        console.log(error)
+        response.status(404).send(`Private room, please go back`)
+    }
 })
 
 
@@ -25,7 +31,7 @@ questionRouter.post('/', async (request, response) => {
     } 
     catch (error) {
         console.log(error)
-        response.status(404).send(`There was a problem submitting your accusation`)
+        response.status(404).send(`Private room, please go back`)
     }
 })
 
@@ -33,13 +39,14 @@ questionRouter.post('/', async (request, response) => {
 questionRouter.get('/:questionId', async (request, response) => {
     let roomId = request.params.roomId
     let questionId = request.params.questionId
+    const back = textFormats.paragraphFormat(textFormats.textLink(`Go Back`, './'))
     try {
         db.getCollection('rooms').then((room) => {
             return room.findOne({
                 room: roomId
             })
             .then((document) => {
-                response.send(textFormat.paragraphFormat(document.answers[questionId]))
+                response.send(textFormats.paragraphFormat(document.answers[questionId])+back)
             })
         })
     }

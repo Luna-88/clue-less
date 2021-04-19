@@ -12,7 +12,13 @@ roomRouter.use('/:roomId/questions', questionRouter) //Nesting routes
 
 roomRouter.get('/', async (request, response) => {
     let roomList = await rooms.listRooms()
-    response.send(roomList)
+    try {
+        response.send(roomList)
+    }
+    catch {
+        console.log(error)
+        response.status(404).send(`Private room, please go back`)
+    }
 })
 
 

@@ -6,7 +6,7 @@ let lastAccusation = []
 let currentKiller = []
 
 
-async function findKiller() {
+async function findKiller(response) {
     let lastAccusation = []
     let currentKiller = []
     const accusationsCollection = await db.getCollection("accusations")
@@ -20,10 +20,9 @@ async function findKiller() {
         .project({ "_id": 0 })
         .forEach(document => currentKiller.push(document))
     if (JSON.stringify(lastAccusation[0]) === JSON.stringify(currentKiller[0])) {
-        return alert(`You have found the killer!`)
-        
+        return response.redirect("/score")
     } else {
-        return alert(`Please, try again`)
+        return alert(`Sorry, that's not correct. Please, try again`)
     }
 }
 

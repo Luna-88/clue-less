@@ -1,4 +1,3 @@
-const components = require('../view/components')
 const textFormat = require('../view/textFormats')
 const db = require('./db')
 
@@ -27,7 +26,7 @@ async function selectQuestion() {
 
 async function questionForm(roomId) {
     let questionList = await selectQuestion()
-    const back = textFormat.paragraphFormat(textFormat.textLink(`Go Back`, './'))
+    const back = textFormat.paragraphFormat(textFormat.textLink(`Go Back`, `http://localhost:3000/rooms/${roomId}`))
     return `
     <form action="http://localhost:3000/rooms/${roomId}/questions/" method="post" style="margin:0px">
         ${questionList}

@@ -12,7 +12,13 @@ accuseRouter.use(express.json())
 
 accuseRouter.get('/', async (request, response) => {
     const accuseForm = await components.accuseForm()
-    response.send(accuseForm)
+    try {
+        response.send(accuseForm)
+    }
+    catch {
+        console.log(error)
+        response.status(404).send(`There was a problem submitting your accusation`)
+    }
 }
 )
 
@@ -24,14 +30,9 @@ accuseRouter.post('/', (request, response) => {
             return accusation.insertOne(accusationForm)
         })
         .then((result) => {
-            accusations.findKiller()
+            accusations.findKiller(response)
         })
-            .then((result)=>{
-            response.redirect("/accuse")
-        
-        })
-        
-    } 
+    }    
     catch (error) {
         console.log(error)
         response.status(404).send(`There was a problem submitting your accusation`)

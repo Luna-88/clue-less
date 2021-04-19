@@ -28,6 +28,10 @@ function inspectRoom(room) {
                 There is a ${room.weapon} as well`)
             + options
             + back
+    } else if (room.character.length === 0 && room.weapon.length === 0) {
+        return textFormat.paragraphFormat(`${enter}
+        The place is empty...`)
+        + back
     }
 }
 
