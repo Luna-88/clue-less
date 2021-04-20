@@ -3,7 +3,6 @@ const questionRouter = express.Router({ mergeParams: true })
 questionRouter.use(express.urlencoded({ extended: true }))
 questionRouter.use(express.json())
 
-
 const db = require('../model/db')
 const questions = require('../model/questions')
 const textFormats = require('../view/textFormats')
@@ -39,14 +38,14 @@ questionRouter.post('/', async (request, response) => {
 questionRouter.get('/:questionId', async (request, response) => {
     let roomId = request.params.roomId
     let questionId = request.params.questionId
-    const back = textFormats.paragraphFormat(textFormats.textLink(`Go Back`, './'))
+    const ok = textFormats.paragraphFormat(textFormats.textLink(`OK`, './'))
     try {
         db.getCollection('rooms').then((room) => {
             return room.findOne({
                 room: roomId
             })
             .then((document) => {
-                response.send(textFormats.paragraphFormat(document.answers[questionId])+back)
+                response.send(textFormats.textAnswers(document.answers[questionId])+ ok)
             })
         })
     }

@@ -1,6 +1,5 @@
-const textFormat = require('../view/textFormats')
+const textFormats = require('../view/textFormats')
 const db = require('./db')
-
 
 let questionList = []
 
@@ -8,7 +7,7 @@ let questionList = []
 function inputQuestions(questionNumber, questionValue, question) {
     return `
     <input type="radio" name="${questionNumber}" value="${questionValue}">
-    <label for="${questionValue}" style="font-family:calibri; font-size:30px; text-align:justify">${question}</label><br>
+    <label for="${questionValue}" style="font-family:futura; font-size:30px; text-align:justify">${question}</label><br>
      `
 }
 
@@ -26,13 +25,14 @@ async function selectQuestion() {
 
 async function questionForm(roomId) {
     let questionList = await selectQuestion()
-    const back = textFormat.paragraphFormat(textFormat.textLink(`Go Back`, `http://localhost:3000/rooms/${roomId}`))
+    const done = textFormats.paragraphFormat(textFormats.textLink(`Done`, `http://localhost:3000/rooms/${roomId}`))
     return `
+    ${textFormats.gameTitle()}
     <form action="http://localhost:3000/rooms/${roomId}/questions/" method="post" style="margin:0px">
         ${questionList}
-        <input type="submit" value="Ask" style="height:40px; width:65px; font-family:calibri; font-size:25px; text-align:center; margin:10px">
+        <input type="submit" value="Ask" style="height:40px; width:65px; font-family:futura; font-size:25px; text-align:center; margin:10px">
     </form>
-    ${back}
+    ${done}
     `
 }
 

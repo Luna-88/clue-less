@@ -5,19 +5,23 @@ const databaseName = 'Sospecha'
 
 let connectMongoClient = MongoClient.connect(dbUrl, { useUnifiedTopology: true })
 
+
 let getDb = connectMongoClient.then((client) => {
     return client.db(databaseName)
 })
 
+
 function getCollection(name) {
     return getDb.then((db) => { return db.collection(name)})
 }
+
 
 function close() {
     return connectMongoClient.then((client) => {
         return client.close()
     })
 }
+
 
 module.exports = {
     getDb,

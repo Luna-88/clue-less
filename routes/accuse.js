@@ -2,16 +2,14 @@ const express = require('express')
 const accuseRouter = express.Router()
 
 const db = require('../model/db')
-const components = require('../view/components')
 const accusations = require('../model/accusations')
-
 
 accuseRouter.use(express.urlencoded({ extended: true }))
 accuseRouter.use(express.json())
 
 
 accuseRouter.get('/', async (request, response) => {
-    const accuseForm = await components.accuseForm()
+    const accuseForm = await accusations.accuseForm()
     try {
         response.send(accuseForm)
     }

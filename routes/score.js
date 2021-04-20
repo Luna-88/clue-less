@@ -2,7 +2,6 @@ const express = require('express')
 const scoreRouter = express.Router()
 const scoreboardRouter = express.Router({ mergeParams: true })
 
-
 const db = require('../model/db')
 const scores = require('../model/scores')
 const textFormats = require('../view/textFormats')
@@ -11,6 +10,7 @@ const textFormats = require('../view/textFormats')
 scoreRouter.use('/score/scoreboard', scoreboardRouter)
 scoreRouter.use(express.urlencoded({ extended: true }))
 scoreRouter.use(express.json())
+
 
 scoreRouter.get('/', async (request, response) => {
     try {
@@ -26,7 +26,8 @@ scoreRouter.get('/', async (request, response) => {
 })
 
 
-// scoreRouter.post('/', (request, response) => {
+// RETRIEVE SCORE DB AND DISPLAY IN DESCENDING ORDER
+// scoreRouter.get('/scoreboard', (request, response) => {
 //     const userInformation = request.body
 //     try {
 //         db.getCollection('scores').then((user) => {

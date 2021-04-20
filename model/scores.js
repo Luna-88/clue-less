@@ -1,13 +1,9 @@
 const db = require('./db')
 
 
-async function addUserScores(userInitials, score) {
-    let scoreCollection = await db.getCollection('scores')
-    await scoreCollection.insertOne({ userInitials, score })
-
-}
+//When killer found and redirected here, update database and set accuseCount to zero
 
 
-module.exports = {
-    addUserScores,
-}
+// module.exports = {
+//     addUserScores,
+// }
