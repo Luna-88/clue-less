@@ -2,7 +2,7 @@ const textFormats = require('../view/textFormats')
 const db = require('./db')
 
 
-function inspectRoom(room) {
+function inspectRooms(room) {
     const clue = textFormats.gameTitle()
     const anotherRoom = textFormats.paragraphFormat(textFormats.textLink(`Go to another room...`, 'http://localhost:3000/rooms'))
     if (room.character.length === 0) {
@@ -10,9 +10,9 @@ function inspectRoom(room) {
         options = ""
     } else {
         ifCharacter = `You find ${room.character} pacing in inside. `
-        options = [textFormats.textLink(`Ask a Question`, `http://localhost:3000/rooms/${room.room}/questions`),`or`,
-                textFormats.textLink(`Accuse`, `../accuse`)].join(' ')
-    } 
+        options = [textFormats.textLink(`Ask a Question`, `http://localhost:3000/rooms/${room.room}/questions`), `or`,
+        textFormats.textLink(`Accuse`, `../accuse`)].join(' ')
+    }
     if (room.weapon.length === 0) {
         ifWeapon = `You don't see a potential weapon`
     } else {
@@ -21,9 +21,9 @@ function inspectRoom(room) {
     return clue + textFormats.paragraphFormat(`
     You go into the ${room.room.replace("-", " ")} and look around...
     ${room.description}
-    ${ifCharacter}${ifWeapon}`)+
-    options+
-    anotherRoom
+    ${ifCharacter}${ifWeapon}`) +
+        options +
+        anotherRoom
 }
 
 
@@ -42,7 +42,7 @@ async function listRooms() {
 }
 
 
-function roomGrid(list) {
+function displayRoomGrid(list) {
     return `
     <head>
     <style>
@@ -78,7 +78,7 @@ function roomGrid(list) {
     <div class="footer">
     <footer>
         <p class="quit" style="font-family:futura; font-size:30px; padding:10px; float:right">
-            ${textFormats.textLink("Save and Quit","http://localhost:3000/")}
+            ${textFormats.textLink("Save and Quit", "http://localhost:3000/logout")}
         </p>
     </footer>
     </div>
@@ -87,7 +87,7 @@ function roomGrid(list) {
 
 
 module.exports = {
-    inspectRoom,
+    inspectRooms,
     listRooms,
-    roomGrid,
+    displayRoomGrid,
 }

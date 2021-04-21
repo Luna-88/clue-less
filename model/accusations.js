@@ -2,18 +2,19 @@ const alert = require('alert')
 
 const db = require('./db')
 const textFormats = require('../view/textFormats')
-let userAccuseCount = require('../model/users').userAccuseCount
+let users = require('../model/users')
 
-let finalCount = []
+let accuseAttemptCount = 0
+
 
 async function getAnswerOptions(option) {
-    let list = []
+    let answerList = []
     const roomsCollection = await db.getCollection('rooms')
     await roomsCollection.find({})
         .project({ "answers": 0, "_id": 0 })
-        .forEach(document => list
+        .forEach(document => answerList
             .push(textFormats.textOption(document[option])))
-    return list.join("")
+    return answerList.join("")
 }
 
 
@@ -30,16 +31,16 @@ async function getAnswerSelects(option, label) {
 }
 
 
-async function accuseForm() {
-    const selectCharacters = await getAnswerSelects("character", "Who killed him?") 
-    const selectWeapons = await getAnswerSelects("weapon", "What weapon did they use?") 
+async function generateAccusedForm() {
+    const selectCharacters = await getAnswerSelects("character", "Who killed him?")
+    const selectWeapons = await getAnswerSelects("weapon", "What weapon did they use?")
     const selectRooms = await getAnswerSelects("room", "Where did it happen?")
     return `
     <head>
     <style>
     .accuseButton { 
         text-align: center 
-    }
+        }
     </style>
     </head>
     <body style="font-family:futura; font-size:30px; text-align:left">
@@ -60,8 +61,15 @@ async function accuseForm() {
 }
 
 
-async function findKiller(response) {
-    finalCount = userAccuseCount[0].accuseCount++
+async function deleteAccusations() {
+    const usersCollection = await db.getCollection("accusations")
+    await usersCollection.deleteMany({})
+
+}
+
+
+async function findAccused(response) {
+    accuseAttemptCount = users.getCurrentAccuseCountUser()[0].accuseCount++
     let lastAccusation = []
     let currentKiller = []
     const accusationsCollection = await db.getCollection("accusations")
@@ -80,12 +88,18 @@ async function findKiller(response) {
         alert(`Sorry, that's not correct. Please, try again`)
         response.redirect("http://localhost:3000/accuse")
     }
-    return finalCount
+    deleteAccusations()
+}
+
+
+function getAccuseCount() {
+    return accuseAttemptCount
 }
 
 
 module.exports = {
-    findKiller,
-    accuseForm,
-    finalCount,
+    findAccused,
+    generateAccusedForm,
+    getAccuseCount,
+    deleteAccusations,
 }

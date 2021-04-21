@@ -6,11 +6,10 @@ const users = require('../model/users')
 
 let userInformation = []
 
-
+//add middleware to find user
 introRouter.get('/', async (request, response) => {
-    userInformation = request.query
-    console.log(userInformation)
-    await users.findUser(userInformation.firstName, userInformation.lastName)
+    userInformation.push(request.query)
+    await users.findUser(userInformation[0].firstName, userInformation[0].lastName)
     try {
         response.send(textFormat.gameTitle()+textFormat.paragraphFormat(`In 1954, six strangers arrive by ominous invitation at a secluded New England mansion. Greeted by the butler and the maid, each guest receives a pseudonym: Colonel Mustard, Mrs. White, Mrs. Peacock, Rev. Green, Professor Plum, and Miss Scarlett.
         A seventh guest arrives during dinner—Dr. Black, whom the butler reveals has been blackmailing the others: Mrs. Peacock is accused of taking bribes for her husband, a US senator, but denies any wrongdoing and claims she has paid the blackmail to keep the scandal quiet; Mrs. White is suspected in the death of her husband, a nuclear physicist; Professor Plum has lost his medical license due to an affair with a patient; Miss Scarlett runs an underground brothel in Washington, D.C.; Colonel Mustard, though initially suspected of being one of Miss Scarlett's patrons, is a war profiteer; and Rev. Green is a homosexual, a secret that would cost him his preaching position if anyone found out.

@@ -10,7 +10,7 @@ const textFormats = require('../view/textFormats')
 
 questionRouter.get('/', async (request, response) => {
     const roomId = request.params.roomId
-    const questionForm = await questions.questionForm(roomId)
+    const questionForm = await questions.generateQuestionForm(roomId)
     try {
         response.send(questionForm)
     }

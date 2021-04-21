@@ -13,7 +13,7 @@ roomRouter.use('/:roomId/questions', questionRouter) //Nesting routes
 roomRouter.get('/', async (request, response) => {
     const roomList = await rooms.listRooms()
     try {
-        response.send(textFormats.gameTitle()+ rooms.roomGrid(roomList))
+        response.send(textFormats.gameTitle()+ rooms.displayRoomGrid(roomList))
     }
     catch (error) {
         console.log(error)
@@ -30,7 +30,7 @@ roomRouter.get('/:roomId', async (request, response) => {
                 room: roomId
             })
             .then((result) => {
-                response.send(rooms.inspectRoom(result))
+                response.send(rooms.inspectRooms(result))
             })
         })
     }

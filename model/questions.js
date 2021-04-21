@@ -10,7 +10,7 @@ function inputQuestions(questionNumber, questionValue, question) {
 }
 
 
-async function selectQuestion() {
+async function selectQuestions() {
     let questionList = []
     const questionsCollection = await db.getCollection("questions")
     await questionsCollection.find({})
@@ -21,8 +21,8 @@ async function selectQuestion() {
 }
 
 
-async function questionForm(roomId) {
-    let questionList = await selectQuestion()
+async function generateQuestionForm(roomId) {
+    let questionList = await selectQuestions()
     const done = textFormats.paragraphFormat(textFormats.textLink(`Done`, `http://localhost:3000/rooms/${roomId}`))
     return `
     ${textFormats.gameTitle()}
@@ -36,6 +36,6 @@ async function questionForm(roomId) {
 
 
 module.exports = {
-    selectQuestion,
-    questionForm,
+    selectQuestions,
+    generateQuestionForm,
 }

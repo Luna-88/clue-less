@@ -1,30 +1,31 @@
 const db = require('./db')
 const textFormats = require('../view/textFormats')
 
-let userAccuseCount = []
+let currentAccuseCountUser = []
+
 
 async function createUser(firstName, lastName) {
     db.getCollection("users").then((user) => {
         return user.insertOne({
-            firstName, 
+            firstName,
             lastName,
-            accuseCount:[]
-        })      
+            accuseCount: 0
+        })
     })
 }
 
 
 async function findUser(firstNameBody, lastNameBody) {
     const usersCollection = await db.getCollection('users')
-    await usersCollection.find({firstName:firstNameBody,lastName:lastNameBody})
-        .project({ accuseCount:1, "_id": 0 })
-        .forEach(document => userAccuseCount.push(document))
-    return userAccuseCount
+    await usersCollection.find({ firstName: firstNameBody, lastName: lastNameBody })
+        .project({ accuseCount: 1, "_id": 0 })
+        .forEach(document => currentAccuseCountUser.push(document))
+    return currentAccuseCountUser
 }
 
 
-function userForm(action, method, buttonLabel, signin=false) {
-    if (signin===false) {
+function generateUserForm(action, method, buttonLabel, signin = false) {
+    if (signin === false) {
         signinDiv = ""
         option = `sign in`
     } else {
@@ -35,7 +36,7 @@ function userForm(action, method, buttonLabel, signin=false) {
     `
         option = `register`
     }
-    return textFormats.gameTitle()+`
+    return textFormats.gameTitle() + `
     <head>
     <style>
     .registerButton { 
@@ -57,13 +58,18 @@ function userForm(action, method, buttonLabel, signin=false) {
             </div>
         </form> 
     </div>
-    ` 
+    `
+}
+
+
+function getCurrentAccuseCountUser() {
+    return currentAccuseCountUser
 }
 
 
 module.exports = {
     createUser,
-    userForm,
+    generateUserForm,
     findUser,
-    userAccuseCount,
+    getCurrentAccuseCountUser,
 }

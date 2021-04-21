@@ -5,13 +5,14 @@ userRouter.use(express.urlencoded({ extended: true }))
 userRouter.use(express.json())
 
 const users = require('../model/users')
+const scores = require('../model/scores')
 
 let userInformation = []
 
 
 userRouter.get('/', async (request, response) => {
     try {
-        response.send(users.userForm("http://localhost:3000/", "post","Register",signin=true))
+        response.send(users.generateUserForm("http://localhost:3000/", "post","Register",signin=true))
     }
     catch (error) {
         console.log(error)
@@ -34,18 +35,26 @@ userRouter.post('/', (request, response) => {
 })
 
 
-//When save and quit redirected here, update database and set accuseCount to finalCount
-//userRouter.put
-
-
 userRouter.get('/signin', async (request, response) => {
     try {
-        response.send(users.userForm("http://localhost:3000/intro", "get", "Sign in"))
+        response.send(users.generateUserForm("http://localhost:3000/intro", "get", "Sign in"))
     }
     catch {
         console.log(error)
         response.status(404).send(`There was a problem accessing your information`)
     } 
+})
+
+
+userRouter.get('/logout', async (request, response) => {
+    await scores.updateUserScore(win=false)
+    try {
+        response.send(`You've been logged out`)
+    }    
+    catch (error) {
+        console.log(error)
+        response.status(404).send(`There was a problem accessing your information`)
+    }
 })
 
 

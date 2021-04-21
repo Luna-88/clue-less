@@ -9,9 +9,9 @@ accuseRouter.use(express.json())
 
 
 accuseRouter.get('/', async (request, response) => {
-    const accuseForm = await accusations.accuseForm()
+    const accusedForm = await accusations.generateAccusedForm()
     try {
-        response.send(accuseForm)
+        response.send(accusedForm)
     }
     catch (error) {
         console.log(error)
@@ -28,7 +28,7 @@ accuseRouter.post('/', (request, response) => {
             return accusation.insertOne(accusationForm)
         })
         .then((result) => {
-            accusations.findKiller(response)
+            accusations.findAccused(response)
         })
     }    
     catch (error) {

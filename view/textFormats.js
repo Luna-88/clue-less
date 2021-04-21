@@ -25,7 +25,7 @@ function textLink(sentence, reference) {
 
 function titleCase(text) {
     let textLowerCase = text.toLowerCase();
-    let textArray = textLowerCase.split(" ").map(function(currentValue) {
+    let textArray = textLowerCase.split(" ").map(function (currentValue) {
         return currentValue[0].toUpperCase() + currentValue.substring(1);
     });
 

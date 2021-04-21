@@ -12,7 +12,7 @@ let getDb = connectMongoClient.then((client) => {
 
 
 function getCollection(name) {
-    return getDb.then((db) => { return db.collection(name)})
+    return getDb.then((db) => { return db.collection(name) })
 }
 
 
