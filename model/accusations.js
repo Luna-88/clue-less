@@ -2,18 +2,12 @@ const alert = require('alert')
 
 const db = require('./db')
 const textFormats = require('../view/textFormats')
+let userAccuseCount = require('../model/users').userAccuseCount
 
-let characterList = []
-let weaponList = []
-let roomList = []
+let finalCount = []
 
-let lastAccusation = []
-let currentKiller = []
-let accuseCount = []
-
-
-async function getAnswerOptions(list, option) {
-    list = []
+async function getAnswerOptions(option) {
+    let list = []
     const roomsCollection = await db.getCollection('rooms')
     await roomsCollection.find({})
         .project({ "answers": 0, "_id": 0 })
@@ -23,8 +17,8 @@ async function getAnswerOptions(list, option) {
 }
 
 
-async function getAnswerSelects(optionList, option, label) {
-    const options = await getAnswerOptions(optionList, option)
+async function getAnswerSelects(option, label) {
+    const options = await getAnswerOptions(option)
     return `
     <div style="padding:5px">
         <label for="${option}">${label}</label><br>
@@ -37,9 +31,9 @@ async function getAnswerSelects(optionList, option, label) {
 
 
 async function accuseForm() {
-    const selectCharacters = await getAnswerSelects(characterList, "character", "Who killed him?")
-    const selectWeapons = await getAnswerSelects(weaponList, "weapon", "What weapon did they use?")
-    const selectRooms = await getAnswerSelects(roomList, "room", "Where did it happen?")
+    const selectCharacters = await getAnswerSelects("character", "Who killed him?") 
+    const selectWeapons = await getAnswerSelects("weapon", "What weapon did they use?") 
+    const selectRooms = await getAnswerSelects("room", "Where did it happen?")
     return `
     <head>
     <style>
@@ -60,14 +54,14 @@ async function accuseForm() {
                 </div>
             </form>
         </div>
+        ${textFormats.paragraphFormat(textFormats.textLink(`Go Back to Rooms`, `http://localhost:3000/rooms/`))}
     </body>
     `
 }
 
 
-// ADD SOMETHIN TO COUNT THE TIMES YOU ACCUSE BEFORE GETTING IT RIGHT
 async function findKiller(response) {
-    accuseCount++
+    finalCount = userAccuseCount[0].accuseCount++
     let lastAccusation = []
     let currentKiller = []
     const accusationsCollection = await db.getCollection("accusations")
@@ -81,16 +75,17 @@ async function findKiller(response) {
         .project({ "_id": 0 })
         .forEach(document => currentKiller.push(document))
     if (JSON.stringify(lastAccusation[0]) === JSON.stringify(currentKiller[0])) {
-        return response.redirect("/score")
+        response.redirect("http://localhost:3000/score")
     } else {
-        return alert(`Sorry, that's not correct. Please, try again`)
+        alert(`Sorry, that's not correct. Please, try again`)
+        response.redirect("http://localhost:3000/accuse")
     }
+    return finalCount
 }
 
 
 module.exports = {
     findKiller,
-    lastAccusation,
-    currentKiller,
     accuseForm,
+    finalCount,
 }

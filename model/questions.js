@@ -1,8 +1,6 @@
 const textFormats = require('../view/textFormats')
 const db = require('./db')
 
-let questionList = []
-
 
 function inputQuestions(questionNumber, questionValue, question) {
     return `
@@ -13,7 +11,7 @@ function inputQuestions(questionNumber, questionValue, question) {
 
 
 async function selectQuestion() {
-    questionList = []
+    let questionList = []
     const questionsCollection = await db.getCollection("questions")
     await questionsCollection.find({})
         .project({ "_id": 0 })

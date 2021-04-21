@@ -13,7 +13,7 @@ accuseRouter.get('/', async (request, response) => {
     try {
         response.send(accuseForm)
     }
-    catch {
+    catch (error) {
         console.log(error)
         response.status(404).send(`There was a problem submitting your accusation`)
     }

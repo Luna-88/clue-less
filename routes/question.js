@@ -14,7 +14,7 @@ questionRouter.get('/', async (request, response) => {
     try {
         response.send(questionForm)
     }
-    catch {
+    catch (error) {
         console.log(error)
         response.status(404).send(`Private room, please go back`)
     }
@@ -36,8 +36,8 @@ questionRouter.post('/', async (request, response) => {
 
 
 questionRouter.get('/:questionId', async (request, response) => {
-    let roomId = request.params.roomId
-    let questionId = request.params.questionId
+    const roomId = request.params.roomId
+    const questionId = request.params.questionId
     const ok = textFormats.paragraphFormat(textFormats.textLink(`OK`, './'))
     try {
         db.getCollection('rooms').then((room) => {

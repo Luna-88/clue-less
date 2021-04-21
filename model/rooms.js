@@ -1,56 +1,41 @@
-const textFormat = require('../view/textFormats')
+const textFormats = require('../view/textFormats')
 const db = require('./db')
-
-let roomList = []
 
 
 function inspectRoom(room) {
-    const clue = textFormat.gameTitle()
-    const enter = `You have entered the ${room.room}...`
-    const options = [textFormat.textLink(`
-        Ask a Question`, `http://localhost:3000/rooms/${room.room}/questions`),
-        `or`,
-        textFormat.textLink(`
-        Accuse`, `../accuse`)].join(' ')
-    const anotherRoom = textFormat.paragraphFormat(textFormat.textLink(`Go to another room...`, 'http://localhost:3000/rooms'))
-    if (room.character.length === 0 && room.weapon.length > 0) {
-        return clue + textFormat.paragraphFormat(`
-        ${enter}
-        No one is here...
-        You look around...
-        There is a ${room.weapon} in the room`)
-        + anotherRoom
-    } if (room.character.length > 0 && room.weapon.length === 0) {
-        return clue + textFormat.paragraphFormat(`
-        ${enter}
-        You find ${room.character} pacing inside...`)
-        + options
-        + anotherRoom
-    } if (room.character.length > 0 && room.weapon.length > 0) {
-        return clue + textFormat.paragraphFormat(`
-        ${enter}
-        You find ${room.character} pacing in the room...
-        There is a ${room.weapon} as well`)
-        + options
-        + anotherRoom
-    } if (room.character.length === 0 && room.weapon.length === 0) {
-        return clue + textFormat.paragraphFormat(`
-        ${enter}
-        The place is empty...`)
-        + anotherRoom
+    const clue = textFormats.gameTitle()
+    const anotherRoom = textFormats.paragraphFormat(textFormats.textLink(`Go to another room...`, 'http://localhost:3000/rooms'))
+    if (room.character.length === 0) {
+        ifCharacter = `There is no one inside...`
+        options = ""
+    } else {
+        ifCharacter = `You find ${room.character} pacing in inside. `
+        options = [textFormats.textLink(`Ask a Question`, `http://localhost:3000/rooms/${room.room}/questions`),`or`,
+                textFormats.textLink(`Accuse`, `../accuse`)].join(' ')
+    } 
+    if (room.weapon.length === 0) {
+        ifWeapon = `You don't see a potential weapon`
+    } else {
+        ifWeapon = `You notice something is out of place, a ${room.weapon}.`
     }
+    return clue + textFormats.paragraphFormat(`
+    You go into the ${room.room.replace("-", " ")} and look around...
+    ${room.description}
+    ${ifCharacter}${ifWeapon}`)+
+    options+
+    anotherRoom
 }
 
 
 async function listRooms() {
-    roomList = []
+    let roomList = []
     const roomsCollection = await db.getCollection('rooms')
     await roomsCollection.find({})
         .project({ "_id": 0 })
         .forEach(document => roomList
             .push(`
             <div class="grid-item">
-                ${textFormat.paragraphFormat(textFormat.textLink(textFormat.textOption(document.room), `/rooms/${document.room}`))}
+                ${textFormats.paragraphFormat(textFormats.textLink(textFormats.textOption(document.room), `/rooms/${document.room}`))}
             </div>
             `))
     return roomList.join('')
@@ -83,9 +68,6 @@ function roomGrid(list) {
             bottom: 0;
             width: 100%;
         }
-        .quit {
-            float: right;
-        }
     </style>
     </head>
     <body>
@@ -95,24 +77,13 @@ function roomGrid(list) {
     </body>
     <div class="footer">
     <footer>
-        <p class="quit" style="font-family:futura; font-size:30px">
-            Save and Quit
+        <p class="quit" style="font-family:futura; font-size:30px; padding:10px; float:right">
+            ${textFormats.textLink("Save and Quit","http://localhost:3000/")}
         </p>
     </footer>
     </div>
     `
 }
-
-// async function listRooms() {
-//     roomList = []
-//     const roomsCollection = await db.getCollection('rooms')
-//     await roomsCollection.find({})
-//         .project({ "room": 1, "_id": 0 })
-//         .forEach(document => roomList
-//             .push(textFormat.paragraphFormat(textFormat.textLink(
-//             document.room, `/rooms/${document.room}`))))
-//     return roomList.join('')
-// }
 
 
 module.exports = {

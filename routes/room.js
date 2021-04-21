@@ -11,11 +11,11 @@ roomRouter.use('/:roomId/questions', questionRouter) //Nesting routes
 
 
 roomRouter.get('/', async (request, response) => {
-    let roomList = await rooms.listRooms()
+    const roomList = await rooms.listRooms()
     try {
         response.send(textFormats.gameTitle()+ rooms.roomGrid(roomList))
     }
-    catch {
+    catch (error) {
         console.log(error)
         response.status(404).send(`Private room, please go back`)
     }
@@ -23,7 +23,7 @@ roomRouter.get('/', async (request, response) => {
 
 
 roomRouter.get('/:roomId', async (request, response) => {
-    let roomId = request.params.roomId
+    const roomId = request.params.roomId
     try {
         db.getCollection('rooms').then((room) => {
             return room.findOne({
