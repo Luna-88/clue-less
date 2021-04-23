@@ -1,4 +1,4 @@
-# solve-murder
+# clue-less
 
 Express based game, designed to be played on a browser.
 
