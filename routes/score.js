@@ -18,7 +18,6 @@ scoreRouter.get('/', async (request, response) => {
     }
 })
 
-
 scoreRouter.get('/scoreboard', async (request, response) => {
     try {
         const scoreboard = await scores.generateScoreboard(accusations.getAccuseCount())
@@ -29,7 +28,6 @@ scoreRouter.get('/scoreboard', async (request, response) => {
         response.status(404).send(`There was a problem displaying the scoreboard`)
     }
 })
-
 
 module.exports = {
     scoreRouter,

@@ -3,19 +3,19 @@ const textFormats = require('../view/textFormats')
 
 let currentAccuseCountUser = []
 
-async function createUser(firstName, lastName) {
+async function createUser(username, password) {
     db.getCollection("users").then((user) => {
         return user.insertOne({
-            firstName,
-            lastName,
+            username,
+            password,
             accuseCount: 0
         })
     })
 }
 
-async function findUser(firstNameBody, lastNameBody) {
+async function findUser(usernameBody, passwordBody) {
     const usersCollection = await db.getCollection('users')
-    await usersCollection.find({ firstName: firstNameBody, lastName: lastNameBody })
+    await usersCollection.find({ username: usernameBody, password: passwordBody })
         .project({ accuseCount: 1, "_id": 0 })
         .forEach(document => currentAccuseCountUser.push(document))
     return currentAccuseCountUser
@@ -45,10 +45,10 @@ function generateUserForm(action, method, buttonLabel, signin = false) {
     <body style="font-family:futura; font-size:30px; text-align:justify">
     <div style="margin:auto;width:252px;border:3px solid grey;padding:10px">
         <form action="${action}" method="${method}">
-            <label for="firstName">First name:</label><br>
-            <input type="text" id="firstName" name="firstName" required placeholder="Jon" style="height:40px; width:250px font-family:futura; font-size:20px"><br>
-            <label for="lastName">Last name:</label><br>
-            <input type="text" id="lastName" name="lastName" required placeholder="Snow" style="height:40px; width:250px font-family:futura; font-size:20px"><br>
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username" required placeholder="turncloak" style="height:40px; width:250px font-family:futura; font-size:20px"><br>
+            <label for="password">Password:</label><br>
+            <input type="text" id="password" name="password" required placeholder="goodboyGhost" style="height:40px; width:250px font-family:futura; font-size:20px"><br>
             <div class="registerButton">
                 <input type="submit" value="${buttonLabel}" style="margin:10px; height:40px;width:110px; font-family:futura; font-size:25px; text-align:center">
                 ${signinDiv}
@@ -68,7 +68,11 @@ function resetCurrentAccuseCountUser() {
 
 function generateUserLogoutMessage() {
     return textFormats.displayParagraphFormat(`You logged out succesfully
-    ${textFormats.setTextLink(`Play Again`, "http://localhost:3000/signin")}`)
+    ${textFormats.setTextLink(`Play Again`, "http://localhost:3000/")}`)
+}
+
+function resetUserSignInInformation(userInformation) {
+    return userInformation.length = 0
 }
 
 module.exports = {
@@ -78,4 +82,5 @@ module.exports = {
     getCurrentAccuseCountUser,
     resetCurrentAccuseCountUser,
     generateUserLogoutMessage,
+    resetUserSignInInformation,
 }

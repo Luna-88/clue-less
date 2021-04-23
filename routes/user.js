@@ -7,9 +7,12 @@ userRouter.use(express.json())
 const users = require('../model/users')
 const scores = require('../model/scores')
 const accusations = require('../model/accusations')
-const intro = require('./intro')
+let userSignInInformation = require('./intro').userSignInInformation
 
 userRouter.get('/', async (request, response) => {
+    accusations.resetAccuseCount()
+    users.resetCurrentAccuseCountUser()
+    users.resetUserSignInInformation(userSignInInformation)
     try {
         response.send(users.generateUserForm("http://localhost:3000/", "post", "Register", signin = true))
     }
@@ -22,7 +25,7 @@ userRouter.get('/', async (request, response) => {
 userRouter.post('/', (request, response) => {
     const userRegisterInformation = request.body
     try {
-        users.createUser(userRegisterInformation.firstName, userRegisterInformation.lastName).then(result => {
+        users.createUser(userRegisterInformation.username, userRegisterInformation.password).then(result => {
             response.redirect("http://localhost:3000/signin")
         })
     }
@@ -34,9 +37,6 @@ userRouter.post('/', (request, response) => {
 
 userRouter.get('/signin', async (request, response) => {
     try {
-        accusations.resetAccuseCount()
-        users.resetCurrentAccuseCountUser()
-        intro.resetUserSignInInformation()
         response.send(users.generateUserForm("http://localhost:3000/intro", "get", "Sign in"))
     }
     catch {
@@ -46,8 +46,8 @@ userRouter.get('/signin', async (request, response) => {
 })
 
 userRouter.get('/save-logout', async (request, response) => {
-    await scores.updateUserScore(accusations.getAccuseCount(), reset = false)
     try {
+        await scores.updateUserScore(accusations.getAccuseCount(), reset = false)
         response.send(users.generateUserLogoutMessage())
     }
     catch (error) {
@@ -57,8 +57,8 @@ userRouter.get('/save-logout', async (request, response) => {
 })
 
 userRouter.get('/quit-logout', async (request, response) => {
-    await scores.updateUserScore(accusations.getAccuseCount(), reset = true)
     try {
+        await scores.updateUserScore(accusations.getAccuseCount(), reset = true)
         response.send(users.generateUserLogoutMessage())
     }
     catch (error) {

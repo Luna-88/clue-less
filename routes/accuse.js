@@ -21,7 +21,7 @@ accuseRouter.post('/', async (request, response) => {
     const selectedAccuseOptions = request.body
     try {
         await accusations.addAccusations(selectedAccuseOptions)
-        response.redirect("http://localhost:3000/score/")
+        response.redirect("http://localhost:3000/score")
     }
     catch (error) {
         console.log(error)

@@ -68,7 +68,7 @@ async function addAccusations(selectedAccuseOptions) {
 }
 
 async function findAccused(response) {
-    accuseAttemptCount = users.getCurrentAccuseCountUser()[0].accuseCount + 1
+    accuseAttemptCount++
     let lastAccusation = []
     let currentKiller = []
     const accusationsCollection = await db.getCollection("accusations")
@@ -82,7 +82,7 @@ async function findAccused(response) {
         .project({ "_id": 0 })
         .forEach(document => currentKiller.push(document))
     if (JSON.stringify(lastAccusation[0]) === JSON.stringify(currentKiller[0])) {
-        response.send(scores.generateWinnerMessage(accuseAttemptCount))
+        response.send(scores.generateWinnerMessage(users.getCurrentAccuseCountUser()[0].accuseCount + accuseAttemptCount))
     } else {
         alert(`Sorry, that's not correct. Please, try again`)
         response.redirect("http://localhost:3000/accuse")
@@ -91,7 +91,7 @@ async function findAccused(response) {
 }
 
 function getAccuseCount() {
-    return accuseAttemptCount
+    return users.getCurrentAccuseCountUser()[0].accuseCount + accuseAttemptCount
 }
 
 function resetAccuseCount() {

@@ -1,23 +1,23 @@
 const db = require('./db')
-const currentUserSignInInformation = require('../routes/intro').userSignInInformation
+let userSignInInformation = require('../routes/intro').userSignInInformation
 const textFormats = require('../view/textFormats')
 
 async function updateUserScore(accuseAttemptCount, reset = true) {
-    if (accuseAttemptCount !== 0) {
+//    if (accuseAttemptCount !== 0) {
         const usersCollection = await db.getCollection("users")
         if (reset === false) {
-            await usersCollection.updateOne({ firstName: currentUserSignInInformation[0].firstName, lastName: currentUserSignInInformation[0].lastName }, { $set: { accuseCount: accuseAttemptCount } })
+            await usersCollection.updateOne({ username: userSignInInformation[0].username, password: userSignInInformation[0].password }, { $set: { accuseCount: accuseAttemptCount } })
         } else {
-            await usersCollection.updateOne({ firstName: currentUserSignInInformation[0].firstName, lastName: currentUserSignInInformation[0].lastName }, { $set: { accuseCount: 0 } })
+            await usersCollection.updateOne({ username: userSignInInformation[0].username, password: userSignInInformation[0].password }, { $set: { accuseCount: 0 } })
         }
         return usersCollection
     }
-}
+//}
 
-function displayUserScores(firstName, lastName, accuseCount) {
+function displayUserScores(username, accuseCount) {
     return `
     <tr>
-        <td>${firstName} ${lastName}</td>
+        <td>${username}</td>
         <td>${accuseCount}</td>
     </tr>`
 }
@@ -29,7 +29,7 @@ async function generateScoreboard(accuseAttemptCount) {
         .project({ "_id": 0 })
         .sort({ "accuseCount": 1 })
         .forEach(document => userScoreList
-            .push(displayUserScores(document.firstName, document.lastName, document.accuseCount)))
+            .push(displayUserScores(document.username, document.accuseCount)))
     return `
     <head>
     <style>
@@ -63,7 +63,7 @@ async function generateScoreboard(accuseAttemptCount) {
     <body>
         <table id="users">
         <tr>
-            <th>Player Name</th>
+            <th>Player</th>
             <th>Accuse Attempts</th>
         </tr>
         ${userScoreList.join('')}
