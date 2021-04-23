@@ -1,10 +1,11 @@
-function gameTitle() {
+function displayGameTitle() {
     return `
     <h1 style="font-family:futura; font-weight:bolder; font-size:50px; color:blue; text-align:center">CLUE-less</h1>
     `
 }
 
-function paragraphFormat(text) {
+
+function displayParagraphFormat(text) {
     let paragraphs = text.split('\n')
     htmlText = paragraphs.map(paragraph => `
     <p style="font-family:futura; font-size:30px; text-align:justify; margin:20px 0px">
@@ -14,7 +15,8 @@ function paragraphFormat(text) {
     return htmlText.join("\n")
 }
 
-function textLink(sentence, reference) {
+
+function setTextLink(sentence, reference) {
     return `
     <body style="font-family:futura; font-size:30px; text-align:justify">
         <a href=${reference}>${sentence}</a>
@@ -23,7 +25,7 @@ function textLink(sentence, reference) {
 }
 
 
-function titleCase(text) {
+function setTitleCase(text) {
     let textLowerCase = text.toLowerCase();
     let textArray = textLowerCase.split(" ").map(function (currentValue) {
         return currentValue[0].toUpperCase() + currentValue.substring(1);
@@ -33,9 +35,9 @@ function titleCase(text) {
 }
 
 
-function textOption(text) {
+function skipEmptyValues(text) {
     if (text.length > 0) {
-        const modifiedText = titleCase(text.replace("-", " "))
+        const modifiedText = setTitleCase(text.replace("-", " "))
         return `
         <option value="${text}" style="font-family:futura; font-size:30px">${modifiedText}</option>
     `
@@ -46,21 +48,10 @@ function textOption(text) {
 }
 
 
-function textAnswers(text) {
-    return `
-    <div style="margin:auto;width:35%;border-radius:90px;border:3px solid blue;padding:30px">
-        ${paragraphFormat(`"${text}"`)}
-    </div>
-    <div style="margin:auto; background: white; width:0; height:0; border-top: 50px solid blue; border-left: 30px solid transparent;">
-    </div>
-    `
-}
-
 module.exports = {
-    paragraphFormat,
-    textLink,
-    textOption,
-    gameTitle,
-    textAnswers,
+    displayParagraphFormat,
+    setTextLink,
+    skipEmptyValues,
+    displayGameTitle,
 }
 

@@ -3,7 +3,6 @@ const textFormats = require('../view/textFormats')
 
 let currentAccuseCountUser = []
 
-
 async function createUser(firstName, lastName) {
     db.getCollection("users").then((user) => {
         return user.insertOne({
@@ -14,7 +13,6 @@ async function createUser(firstName, lastName) {
     })
 }
 
-
 async function findUser(firstNameBody, lastNameBody) {
     const usersCollection = await db.getCollection('users')
     await usersCollection.find({ firstName: firstNameBody, lastName: lastNameBody })
@@ -22,7 +20,6 @@ async function findUser(firstNameBody, lastNameBody) {
         .forEach(document => currentAccuseCountUser.push(document))
     return currentAccuseCountUser
 }
-
 
 function generateUserForm(action, method, buttonLabel, signin = false) {
     if (signin === false) {
@@ -36,12 +33,12 @@ function generateUserForm(action, method, buttonLabel, signin = false) {
     `
         option = `register`
     }
-    return textFormats.gameTitle() + `
+    return textFormats.displayGameTitle() + `
     <head>
     <style>
-    .registerButton { 
-        text-align: center 
-    }
+        .registerButton { 
+            text-align: center 
+        }
     </style>
     </head>
     <p style="text-align: center">Please, ${option} to play</p>
@@ -61,15 +58,24 @@ function generateUserForm(action, method, buttonLabel, signin = false) {
     `
 }
 
-
 function getCurrentAccuseCountUser() {
     return currentAccuseCountUser
 }
 
+function resetCurrentAccuseCountUser() {
+    return currentAccuseCountUser = []
+}
+
+function generateUserLogoutMessage() {
+    return textFormats.displayParagraphFormat(`You logged out succesfully
+    ${textFormats.setTextLink(`Play Again`, "http://localhost:3000/signin")}`)
+}
 
 module.exports = {
     createUser,
     generateUserForm,
     findUser,
     getCurrentAccuseCountUser,
+    resetCurrentAccuseCountUser,
+    generateUserLogoutMessage,
 }

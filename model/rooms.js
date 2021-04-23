@@ -1,24 +1,23 @@
 const textFormats = require('../view/textFormats')
 const db = require('./db')
 
-
 function inspectRooms(room) {
-    const clue = textFormats.gameTitle()
-    const anotherRoom = textFormats.paragraphFormat(textFormats.textLink(`Go to another room...`, 'http://localhost:3000/rooms'))
+    const clue = textFormats.displayGameTitle()
+    const anotherRoom = textFormats.displayParagraphFormat(textFormats.setTextLink(`Go to another room...`, 'http://localhost:3000/rooms'))
     if (room.character.length === 0) {
         ifCharacter = `There is no one inside...`
         options = ""
     } else {
         ifCharacter = `You find ${room.character} pacing in inside. `
-        options = [textFormats.textLink(`Ask a Question`, `http://localhost:3000/rooms/${room.room}/questions`), `or`,
-        textFormats.textLink(`Accuse`, `../accuse`)].join(' ')
+        options = [textFormats.setTextLink(`Ask a Question`, `http://localhost:3000/rooms/${room.room}/questions`), `or`,
+        textFormats.setTextLink(`Accuse`, `../accuse`)].join(' ')
     }
     if (room.weapon.length === 0) {
         ifWeapon = `You don't see a potential weapon`
     } else {
         ifWeapon = `You notice something is out of place, a ${room.weapon}.`
     }
-    return clue + textFormats.paragraphFormat(`
+    return clue + textFormats.displayParagraphFormat(`
     You go into the ${room.room.replace("-", " ")} and look around...
     ${room.description}
     ${ifCharacter}${ifWeapon}`) +
@@ -26,8 +25,7 @@ function inspectRooms(room) {
         anotherRoom
 }
 
-
-async function listRooms() {
+async function displayRoomGrid() {
     let roomList = []
     const roomsCollection = await db.getCollection('rooms')
     await roomsCollection.find({})
@@ -35,14 +33,9 @@ async function listRooms() {
         .forEach(document => roomList
             .push(`
             <div class="grid-item">
-                ${textFormats.paragraphFormat(textFormats.textLink(textFormats.textOption(document.room), `/rooms/${document.room}`))}
+                ${textFormats.displayParagraphFormat(textFormats.setTextLink(textFormats.skipEmptyValues(document.room), `/rooms/${document.room}`))}
             </div>
             `))
-    return roomList.join('')
-}
-
-
-function displayRoomGrid(list) {
     return `
     <head>
     <style>
@@ -72,22 +65,23 @@ function displayRoomGrid(list) {
     </head>
     <body>
     <div class="grid-container">
-        ${list}
+        ${roomList.join('')}
     </div>
     </body>
     <div class="footer">
     <footer>
         <p class="quit" style="font-family:futura; font-size:30px; padding:10px; float:right">
-            ${textFormats.textLink("Save and Quit", "http://localhost:3000/logout")}
+            ${textFormats.setTextLink("Quit", "http://localhost:3000/quit-logout")}
+        </p>
+        <p class="save" style="font-family:futura; font-size:30px; padding:10px; float:left">
+            ${textFormats.setTextLink("Save and Quit", "http://localhost:3000/save-logout")}
         </p>
     </footer>
     </div>
     `
 }
 
-
 module.exports = {
     inspectRooms,
-    listRooms,
     displayRoomGrid,
 }

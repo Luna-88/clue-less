@@ -1,11 +1,10 @@
 const alert = require('alert')
-
 const db = require('./db')
 const textFormats = require('../view/textFormats')
-let users = require('../model/users')
+const users = require('../model/users')
+const scores = require('./scores')
 
 let accuseAttemptCount = 0
-
 
 async function getAnswerOptions(option) {
     let answerList = []
@@ -13,10 +12,9 @@ async function getAnswerOptions(option) {
     await roomsCollection.find({})
         .project({ "answers": 0, "_id": 0 })
         .forEach(document => answerList
-            .push(textFormats.textOption(document[option])))
+            .push(textFormats.skipEmptyValues(document[option])))
     return answerList.join("")
 }
-
 
 async function getAnswerSelects(option, label) {
     const options = await getAnswerOptions(option)
@@ -30,7 +28,6 @@ async function getAnswerSelects(option, label) {
     `
 }
 
-
 async function generateAccusedForm() {
     const selectCharacters = await getAnswerSelects("character", "Who killed him?")
     const selectWeapons = await getAnswerSelects("weapon", "What weapon did they use?")
@@ -38,13 +35,13 @@ async function generateAccusedForm() {
     return `
     <head>
     <style>
-    .accuseButton { 
-        text-align: center 
+        .accuseButton { 
+            text-align: center 
         }
     </style>
     </head>
     <body style="font-family:futura; font-size:30px; text-align:left">
-    ${textFormats.gameTitle()}
+    ${textFormats.displayGameTitle()}
         <div style="margin:auto;width:345px;border:3px solid grey;padding:10px">    
             <form action="http://localhost:3000/accuse" method="post">
                 ${selectCharacters}
@@ -55,21 +52,23 @@ async function generateAccusedForm() {
                 </div>
             </form>
         </div>
-        ${textFormats.paragraphFormat(textFormats.textLink(`Go Back to Rooms`, `http://localhost:3000/rooms/`))}
+        ${textFormats.displayParagraphFormat(textFormats.setTextLink(`Go Back to Rooms`, `http://localhost:3000/rooms/`))}
     </body>
     `
 }
 
-
 async function deleteAccusations() {
     const usersCollection = await db.getCollection("accusations")
     await usersCollection.deleteMany({})
-
 }
 
+async function addAccusations(selectedAccuseOptions) {
+    const accusationsCollection = await db.getCollection("accusations")
+    await accusationsCollection.insertOne(selectedAccuseOptions)
+}
 
 async function findAccused(response) {
-    accuseAttemptCount = users.getCurrentAccuseCountUser()[0].accuseCount++
+    accuseAttemptCount = users.getCurrentAccuseCountUser()[0].accuseCount + 1
     let lastAccusation = []
     let currentKiller = []
     const accusationsCollection = await db.getCollection("accusations")
@@ -83,7 +82,7 @@ async function findAccused(response) {
         .project({ "_id": 0 })
         .forEach(document => currentKiller.push(document))
     if (JSON.stringify(lastAccusation[0]) === JSON.stringify(currentKiller[0])) {
-        response.redirect("http://localhost:3000/score")
+        response.send(scores.generateWinnerMessage(accuseAttemptCount))
     } else {
         alert(`Sorry, that's not correct. Please, try again`)
         response.redirect("http://localhost:3000/accuse")
@@ -91,15 +90,19 @@ async function findAccused(response) {
     deleteAccusations()
 }
 
-
 function getAccuseCount() {
     return accuseAttemptCount
 }
 
+function resetAccuseCount() {
+    return accuseAttemptCount = 0
+}
 
 module.exports = {
     findAccused,
     generateAccusedForm,
     getAccuseCount,
     deleteAccusations,
+    addAccusations,
+    resetAccuseCount,
 }
