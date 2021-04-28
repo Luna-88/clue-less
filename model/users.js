@@ -29,13 +29,24 @@ function generateUserForm(action, method, buttonLabel, signin = false) {
             <label for="username">Username:</label><br>
             <input type="text" id="username" name="username" required placeholder="turncloak" style="height:40px; width:250px font-family:futura; font-size:20px"><br>
             <label for="password">Password:</label><br>
-            <input type="text" id="password" name="password" required placeholder="goodboyGhost" style="height:40px; width:250px font-family:futura; font-size:20px"><br>
+            <input type="password" id="password" name="password" required placeholder="goodboyGhost" style="height:40px; width:250px font-family:futura; font-size:20px"><br>
+            <input type="checkbox" onclick="showPassword()"><label for="showPassword" style="font-family:futura; font-size:18px">Show Password</label>
             <div class="registerButton">
                 <input type="submit" value="${buttonLabel}" style="margin:10px; height:40px;width:110px; font-family:futura; font-size:25px; text-align:center">
                 ${signinDiv}
             </div>
         </form> 
     </div>
+    <script>
+        function showPassword() {
+            let x = document.getElementById("password")
+            if (x.type === "password") {
+                x.type = "text"
+            } else {
+                x.type = "password"
+            }
+        }
+    </script>
     `
 }
 
