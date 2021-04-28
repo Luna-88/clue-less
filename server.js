@@ -16,5 +16,5 @@ app.use('/score', score)
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, function () {
-    console.log(`http://localhost:${PORT}`);
+    console.log(`http://localhost:${PORT}`)
 })
