@@ -3,23 +3,23 @@ const textFormats = require('../view/textFormats')
 
 let currentAccuseCountUser = []
 
-async function createUser(username, password) {
-    db.getCollection("users").then((user) => {
-        return user.insertOne({
-            username,
-            password,
-            accuseCount: 0
-        })
-    })
-}
+// async function createUser(username, password) {
+//     db.getCollection("users").then((user) => {
+//         return user.insertOne({
+//             username,
+//             password,
+//             accuseCount: 0
+//         })
+//     })
+// }
 
-async function findUser(usernameBody, passwordBody) {
-    const usersCollection = await db.getCollection('users')
-    await usersCollection.find({ username: usernameBody, password: passwordBody })
-        .project({ accuseCount: 1, "_id": 0 })
-        .forEach(document => currentAccuseCountUser.push(document))
-    return currentAccuseCountUser
-}
+// async function findUser(usernameBody, passwordBody) {
+//     const usersCollection = await db.getCollection('users')
+//     await usersCollection.find({ username: usernameBody, password: passwordBody })
+//         .project({ accuseCount: 1, "_id": 0 })
+//         .forEach(document => currentAccuseCountUser.push(document))
+//     return currentAccuseCountUser
+// }
 
 function generateUserForm(action, method, buttonLabel, signin = false) {
     if (signin === false) {
@@ -76,9 +76,9 @@ function resetUserSignInInformation(userInformation) {
 }
 
 module.exports = {
-    createUser,
+//    createUser,
     generateUserForm,
-    findUser,
+//    findUser,
     getCurrentAccuseCountUser,
     resetCurrentAccuseCountUser,
     generateUserLogoutMessage,
