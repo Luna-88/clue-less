@@ -6,6 +6,7 @@ accuseRouter.use(express.json())
 const accusations = require('../model/accusations')
 
 accuseRouter.get('/', async (request, response) => {
+    console.log()
     try {
         const accusedForm = await accusations.generateAccusedForm()
         response.send(accusedForm)
