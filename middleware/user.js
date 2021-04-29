@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const db = require('../model/db')
+const config = require('../config/authentication')
 
 async function checkDuplicateUsername(request, response, next) {
     const usersCollection = await db.getCollection('users')
@@ -36,7 +38,6 @@ async function signInUser(request, response, next) {
     await usersCollection.findOne({ username: request.body.username })
         .then((user) => {
             try {
-                console.log(user)
                 if (!user) {
                     response.status(404).send(`User Not found`)
                 }
@@ -47,6 +48,8 @@ async function signInUser(request, response, next) {
                 if (!passwordIsValid) {
                     response.status(401).send(`Invalid Password!`)
                 }
+                const token = jwt.sign({ username: user.username, accuseCount: user.accuseCount }, config.secret, { expiresIn: 86400 }) //24h
+                response.cookie('accessToken', token, { httpOnly: true, maxAge: 3600000 })
             }
             catch (error) {
                 response.status(500).send(`There was a problem signing in from middle`)
@@ -54,7 +57,6 @@ async function signInUser(request, response, next) {
         })
     next()
 }
-
 
 module.exports = {
     checkDuplicateUsername,

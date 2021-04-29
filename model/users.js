@@ -1,7 +1,5 @@
 const textFormats = require('../view/textFormats')
 
-let currentAccuseCountUser = [] // coming from find user before
-
 function generateUserForm(action, method, buttonLabel, signin = false) {
     if (signin === false) {
         signinDiv = ""
@@ -50,27 +48,12 @@ function generateUserForm(action, method, buttonLabel, signin = false) {
     `
 }
 
-function getCurrentAccuseCountUser() {
-    return currentAccuseCountUser
-}
-
-function resetCurrentAccuseCountUser() {
-    return currentAccuseCountUser = []
-}
-
 function generateUserLogoutMessage() {
-    return textFormats.displayParagraphFormat(`You logged out succesfully
+    return textFormats.displayParagraphFormat(`You logged out successfully
     ${textFormats.setTextLink(`Play Again`, "http://localhost:3000/")}`)
-}
-
-function resetUserSignInInformation(userInformation) {
-    return userInformation.length = 0
 }
 
 module.exports = {
     generateUserForm,
-    getCurrentAccuseCountUser,
-    resetCurrentAccuseCountUser,
     generateUserLogoutMessage,
-    resetUserSignInInformation,
 }

@@ -1,4 +1,5 @@
 const express = require('express')
+const cookieParser = require('cookie-parser')
 const app = express()
 
 const intro = require('./routes/intro').introRouter
@@ -7,6 +8,7 @@ const accuse = require('./routes/accuse').accuseRouter
 const score = require('./routes/score').scoreRouter
 const user = require('./routes/user').userRouter
 
+app.use(cookieParser())
 app.use('/', user)
 app.use('/intro', intro)
 app.use('/rooms', routes)

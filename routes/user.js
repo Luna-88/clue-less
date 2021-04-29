@@ -4,15 +4,13 @@ const userRouter = express.Router()
 userRouter.use(express.urlencoded({ extended: true }))
 userRouter.use(express.json())
 
-const userMiddleware = require('../middleware/users')
+const userMiddleware = require('../middleware/user')
 const users = require('../model/users')
 const scores = require('../model/scores')
 const accusations = require('../model/accusations')
 
 userRouter.get('/', async (request, response) => {
-    // accusations.resetAccuseCount()
-    // users.resetCurrentAccuseCountUser()
-    // users.resetUserSignInInformation(userSignInInformation)
+    accusations.resetAccuseAttemptCount()
     try {
         response.send(users.generateUserForm("http://localhost:3000/", "post", "Register", signin = true))
     }
@@ -54,7 +52,7 @@ userRouter.post('/signin', userMiddleware.signInUser, async (request, response) 
 
 userRouter.get('/save-logout', async (request, response) => {
     try {
-        await scores.updateUserScore(accusations.getAccuseCount(), reset = false)
+        await scores.updateUserScore(request, response, accusations.getAccuseAttemptCount(), reset = false)
         response.send(users.generateUserLogoutMessage())
     }
     catch (error) {
@@ -65,7 +63,7 @@ userRouter.get('/save-logout', async (request, response) => {
 
 userRouter.get('/quit-logout', async (request, response) => {
     try {
-        await scores.updateUserScore(accusations.getAccuseCount(), reset = true)
+        await scores.updateUserScore(request, response, accusations.getAccuseAttemptCount(), reset = true)
         response.send(users.generateUserLogoutMessage())
     }
     catch (error) {
