@@ -1,3 +1,4 @@
+const db = require('./db')
 const textFormats = require('../view/textFormats')
 
 function generateUserForm(action, method, buttonLabel, signin = false) {
