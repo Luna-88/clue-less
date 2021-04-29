@@ -7,10 +7,11 @@ scoreRouter.use(express.json())
 
 const scores = require('../model/scores')
 const accusations = require('../model/accusations')
+const tokenMiddleware = require('../middleware/token')
 
-scoreRouter.get('/', async (request, response) => {
+scoreRouter.get('/', tokenMiddleware.verifyAccessToken, async (request, response) => {
     try {
-        await accusations.findAccused(response)
+        await accusations.findAccused(request, response)
     }
     catch (error) {
         console.log(error)
@@ -18,9 +19,9 @@ scoreRouter.get('/', async (request, response) => {
     }
 })
 
-scoreRouter.get('/scoreboard', async (request, response) => {
+scoreRouter.get('/scoreboard', tokenMiddleware.verifyAccessToken, async (request, response) => {
     try {
-        const scoreboard = await scores.generateScoreboard(accusations.getAccuseCount())
+        const scoreboard = await scores.generateScoreboard(request, response, accusations.getAccuseAttemptCount())
         response.send(scoreboard)
     }
     catch (error) {

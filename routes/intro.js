@@ -1,14 +1,9 @@
 const express = require('express')
 const introRouter = express.Router()
 
-const users = require('../model/users')
 const intros = require('../model/intros')
 
-let userSignInInformation = []
-
 introRouter.get('/', async (request, response) => {
-    userSignInInformation.push(request.query)
-    await users.findUser(userSignInInformation[0].username, userSignInInformation[0].password)
     try {
         response.send(intros.generateIntroMessage())
     }
@@ -19,8 +14,6 @@ introRouter.get('/', async (request, response) => {
 }
 )
 
-
 module.exports = {
     introRouter,
-    userSignInInformation,
 }

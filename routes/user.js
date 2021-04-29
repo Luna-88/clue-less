@@ -4,15 +4,13 @@ const userRouter = express.Router()
 userRouter.use(express.urlencoded({ extended: true }))
 userRouter.use(express.json())
 
+const userMiddleware = require('../middleware/user')
 const users = require('../model/users')
 const scores = require('../model/scores')
 const accusations = require('../model/accusations')
-let userSignInInformation = require('./intro').userSignInInformation
 
 userRouter.get('/', async (request, response) => {
-    accusations.resetAccuseCount()
-    users.resetCurrentAccuseCountUser()
-    users.resetUserSignInInformation(userSignInInformation)
+    accusations.resetAccuseAttemptCount()
     try {
         response.send(users.generateUserForm("http://localhost:3000/", "post", "Register", signin = true))
     }
@@ -22,12 +20,9 @@ userRouter.get('/', async (request, response) => {
     }
 })
 
-userRouter.post('/', (request, response) => {
-    const userRegisterInformation = request.body
+userRouter.post('/', userMiddleware.checkDuplicateUsername, userMiddleware.registerUser, async (request, response) => {
     try {
-        users.createUser(userRegisterInformation.username, userRegisterInformation.password).then(result => {
-            response.redirect("http://localhost:3000/signin")
-        })
+        response.redirect("http://localhost:3000/signin")
     }
     catch (error) {
         console.log(error)
@@ -37,7 +32,17 @@ userRouter.post('/', (request, response) => {
 
 userRouter.get('/signin', async (request, response) => {
     try {
-        response.send(users.generateUserForm("http://localhost:3000/intro", "get", "Sign in"))
+        response.send(users.generateUserForm("http://localhost:3000/signin", "post", "Sign in"))
+    }
+    catch {
+        console.log(error)
+        response.status(404).send(`There was a problem signing in`)
+    }
+})
+
+userRouter.post('/signin', userMiddleware.signInUser, async (request, response) => {
+    try {
+        response.redirect("http://localhost:3000/intro")
     }
     catch {
         console.log(error)
@@ -47,7 +52,7 @@ userRouter.get('/signin', async (request, response) => {
 
 userRouter.get('/save-logout', async (request, response) => {
     try {
-        await scores.updateUserScore(accusations.getAccuseCount(), reset = false)
+        await scores.updateUserScore(request, response, accusations.getAccuseAttemptCount(), reset = false)
         response.send(users.generateUserLogoutMessage())
     }
     catch (error) {
@@ -58,7 +63,7 @@ userRouter.get('/save-logout', async (request, response) => {
 
 userRouter.get('/quit-logout', async (request, response) => {
     try {
-        await scores.updateUserScore(accusations.getAccuseCount(), reset = true)
+        await scores.updateUserScore(request, response, accusations.getAccuseAttemptCount(), reset = true)
         response.send(users.generateUserLogoutMessage())
     }
     catch (error) {

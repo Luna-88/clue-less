@@ -1,18 +1,20 @@
+const getAccessToken = require('../middleware/token').getAccessToken
 const db = require('./db')
-let userSignInInformation = require('../routes/intro').userSignInInformation
 const textFormats = require('../view/textFormats')
 
-async function updateUserScore(accuseAttemptCount, reset = true) {
-//    if (accuseAttemptCount !== 0) {
-        const usersCollection = await db.getCollection("users")
-        if (reset === false) {
-            await usersCollection.updateOne({ username: userSignInInformation[0].username, password: userSignInInformation[0].password }, { $set: { accuseCount: accuseAttemptCount } })
-        } else {
-            await usersCollection.updateOne({ username: userSignInInformation[0].username, password: userSignInInformation[0].password }, { $set: { accuseCount: 0 } })
-        }
-        return usersCollection
+async function updateUserScore(request, response, accuseAttemptCount, reset = true) {
+    const userAccessToken = getAccessToken(request, response)
+    const updatedAccuseCountUser = userAccessToken.accuseCount + accuseAttemptCount
+    const username = userAccessToken.username
+    const usersCollection = await db.getCollection("users")
+    if (reset === false) {
+        await usersCollection.updateOne({ username: username },
+            { $set: { accuseCount: updatedAccuseCountUser } })
+    } else {
+        await usersCollection.updateOne({ username: username }, { $set: { accuseCount: 0 } })
     }
-//}
+    return usersCollection
+}
 
 function displayUserScores(username, accuseCount) {
     return `
@@ -22,9 +24,9 @@ function displayUserScores(username, accuseCount) {
     </tr>`
 }
 
-async function generateScoreboard(accuseAttemptCount) {
+async function generateScoreboard(request, response, accuseAttemptCount,) {
     let userScoreList = []
-    const usersCollection = await updateUserScore(accuseAttemptCount, reset = false)
+    const usersCollection = await updateUserScore(request, response, accuseAttemptCount, reset = false)
     await usersCollection.find({ "accuseCount": { $gte: 1, $lte: 10 } })
         .project({ "_id": 0 })
         .sort({ "accuseCount": 1 })

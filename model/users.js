@@ -1,26 +1,6 @@
 const db = require('./db')
 const textFormats = require('../view/textFormats')
 
-let currentAccuseCountUser = []
-
-async function createUser(username, password) {
-    db.getCollection("users").then((user) => {
-        return user.insertOne({
-            username,
-            password,
-            accuseCount: 0
-        })
-    })
-}
-
-async function findUser(usernameBody, passwordBody) {
-    const usersCollection = await db.getCollection('users')
-    await usersCollection.find({ username: usernameBody, password: passwordBody })
-        .project({ accuseCount: 1, "_id": 0 })
-        .forEach(document => currentAccuseCountUser.push(document))
-    return currentAccuseCountUser
-}
-
 function generateUserForm(action, method, buttonLabel, signin = false) {
     if (signin === false) {
         signinDiv = ""
@@ -48,39 +28,33 @@ function generateUserForm(action, method, buttonLabel, signin = false) {
             <label for="username">Username:</label><br>
             <input type="text" id="username" name="username" required placeholder="turncloak" style="height:40px; width:250px font-family:futura; font-size:20px"><br>
             <label for="password">Password:</label><br>
-            <input type="text" id="password" name="password" required placeholder="goodboyGhost" style="height:40px; width:250px font-family:futura; font-size:20px"><br>
+            <input type="password" id="password" name="password" required placeholder="goodboyGhost" style="height:40px; width:250px font-family:futura; font-size:20px"><br>
+            <input type="checkbox" onclick="showPassword()"><label for="showPassword" style="font-family:futura; font-size:18px">Show Password</label>
             <div class="registerButton">
                 <input type="submit" value="${buttonLabel}" style="margin:10px; height:40px;width:110px; font-family:futura; font-size:25px; text-align:center">
                 ${signinDiv}
             </div>
         </form> 
     </div>
+    <script>
+        function showPassword() {
+            let x = document.getElementById("password")
+            if (x.type === "password") {
+                x.type = "text"
+            } else {
+                x.type = "password"
+            }
+        }
+    </script>
     `
 }
 
-function getCurrentAccuseCountUser() {
-    return currentAccuseCountUser
-}
-
-function resetCurrentAccuseCountUser() {
-    return currentAccuseCountUser = []
-}
-
 function generateUserLogoutMessage() {
-    return textFormats.displayParagraphFormat(`You logged out succesfully
+    return textFormats.displayParagraphFormat(`You logged out successfully
     ${textFormats.setTextLink(`Play Again`, "http://localhost:3000/")}`)
 }
 
-function resetUserSignInInformation(userInformation) {
-    return userInformation.length = 0
-}
-
 module.exports = {
-    createUser,
     generateUserForm,
-    findUser,
-    getCurrentAccuseCountUser,
-    resetCurrentAccuseCountUser,
     generateUserLogoutMessage,
-    resetUserSignInInformation,
 }

@@ -1,8 +1,9 @@
 const alert = require('alert')
+
 const db = require('./db')
 const textFormats = require('../view/textFormats')
-const users = require('../model/users')
 const scores = require('./scores')
+const getAccessToken = require('../middleware/token').getAccessToken
 
 let accuseAttemptCount = 0
 
@@ -67,10 +68,11 @@ async function addAccusations(selectedAccuseOptions) {
     await accusationsCollection.insertOne(selectedAccuseOptions)
 }
 
-async function findAccused(response) {
+async function findAccused(request, response) {
     accuseAttemptCount++
     let lastAccusation = []
     let currentKiller = []
+    const currentAccuseCountUser = getAccessToken(request, response).accuseCount
     const accusationsCollection = await db.getCollection("accusations")
     const killersCollection = await db.getCollection("killers")
     await accusationsCollection.find({})
@@ -82,7 +84,7 @@ async function findAccused(response) {
         .project({ "_id": 0 })
         .forEach(document => currentKiller.push(document))
     if (JSON.stringify(lastAccusation[0]) === JSON.stringify(currentKiller[0])) {
-        response.send(scores.generateWinnerMessage(users.getCurrentAccuseCountUser()[0].accuseCount + accuseAttemptCount))
+        response.send(scores.generateWinnerMessage(currentAccuseCountUser + accuseAttemptCount))
     } else {
         alert(`Sorry, that's not correct. Please, try again`)
         response.redirect("http://localhost:3000/accuse")
@@ -90,19 +92,19 @@ async function findAccused(response) {
     deleteAccusations()
 }
 
-function getAccuseCount() {
-    return users.getCurrentAccuseCountUser()[0].accuseCount + accuseAttemptCount
+function getAccuseAttemptCount() {
+    return accuseAttemptCount
 }
 
-function resetAccuseCount() {
+function resetAccuseAttemptCount() {
     return accuseAttemptCount = 0
 }
 
 module.exports = {
     findAccused,
     generateAccusedForm,
-    getAccuseCount,
     deleteAccusations,
     addAccusations,
-    resetAccuseCount,
+    resetAccuseAttemptCount,
+    getAccuseAttemptCount,
 }
