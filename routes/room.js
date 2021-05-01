@@ -3,6 +3,7 @@ const roomRouter = express.Router()
 
 const db = require('../model/db')
 const rooms = require('../model/rooms')
+const components = require('../components/displays/roomGridDisplay')
 const textFormats = require('../view/textFormats')
 const questionRouter = require('./question').questionRouter
 
@@ -10,7 +11,7 @@ roomRouter.use('/:roomId/questions', questionRouter) //Nesting routes
 
 roomRouter.get('/', async (request, response) => {
     try {
-        const displayRoomGrid = await rooms.displayRoomGrid()
+        const displayRoomGrid = await components.displayRoomGrid()
         response.send(textFormats.displayGameTitle() + displayRoomGrid)
     }
     catch (error) {

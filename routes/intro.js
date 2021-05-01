@@ -1,11 +1,11 @@
 const express = require('express')
 const introRouter = express.Router()
 
-const intros = require('../model/intros')
+const components = require('../components/messages/introMessage')
 
 introRouter.get('/', async (request, response) => {
     try {
-        response.send(intros.generateIntroMessage())
+        response.send(components.generateIntroMessage())
     }
     catch (error) {
         console.log(error)

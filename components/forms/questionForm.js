@@ -1,5 +1,5 @@
-const textFormats = require('../view/textFormats')
-const db = require('./db')
+const textFormats = require('../../view/textFormats')
+const db = require('../../model/db')
 
 function displayQuestionFormat(questionNumber, questionValue, question) {
     return `
@@ -26,27 +26,6 @@ async function generateQuestionForm(roomId) {
     `
 }
 
-function displayAnswerFormat(text) {
-    return `
-    <div style="margin:auto;width:35%;border-radius:90px;border:3px solid blue;padding:30px">
-        ${textFormats.displayParagraphFormat(`"${text}"`)}
-    </div>
-    <div style="margin:auto; background: white; width:0; height:0; border-top: 50px solid blue; border-left: 30px solid transparent;">
-    </div>
-    `
-}
-
-async function generateAnswerDisplay(roomId, questionId) {
-    let answer = []
-    const ok = textFormats.displayParagraphFormat(textFormats.setTextLink(`OK`, './'))
-    const roomsCollection = await db.getCollection('rooms')
-    await roomsCollection.find({ room: roomId })
-        .project({ "answers": 1, "_id": 0 })
-        .forEach(document => { answer.push(displayAnswerFormat(document.answers[questionId]) + ok) })
-    return answer.join('')
-}
-
 module.exports = {
     generateQuestionForm,
-    generateAnswerDisplay,
 }

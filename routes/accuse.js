@@ -4,10 +4,11 @@ accuseRouter.use(express.urlencoded({ extended: true }))
 accuseRouter.use(express.json())
 
 const accusations = require('../model/accusations')
+const components = require('../components/forms/accusationForm')
 
 accuseRouter.get('/', async (request, response) => {
     try {
-        const accusedForm = await accusations.generateAccusedForm()
+        const accusedForm = await components.generateAccusationForm()
         response.send(accusedForm)
     }
     catch (error) {

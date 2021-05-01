@@ -1,4 +1,4 @@
-const textFormats = require('../view/textFormats')
+const textFormats = require('../../view/textFormats')
 
 function generateIntroMessage() {
     return textFormats.displayGameTitle() + textFormats.displayParagraphFormat(`

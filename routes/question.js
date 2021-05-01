@@ -3,12 +3,13 @@ const questionRouter = express.Router({ mergeParams: true })
 questionRouter.use(express.urlencoded({ extended: true }))
 questionRouter.use(express.json())
 
-const questions = require('../model/questions')
+const answers = require('../model/answers')
+const components = require('../components/forms/questionForm')
 
 questionRouter.get('/', async (request, response) => {
     const roomId = request.params.roomId
     try {
-        const questionForm = await questions.generateQuestionForm(roomId)
+        const questionForm = await components.generateQuestionForm(roomId)
         response.send(questionForm)
     }
     catch (error) {
@@ -33,7 +34,7 @@ questionRouter.get('/:questionId', async (request, response) => {
     const roomId = request.params.roomId
     const questionId = request.params.questionId
     try {
-        const generateAnswerDisplay = await questions.generateAnswerDisplay(roomId, questionId)
+        const generateAnswerDisplay = await answers.generateAnswerDisplay(roomId, questionId)
         response.send(generateAnswerDisplay)
     }
     catch (error) {

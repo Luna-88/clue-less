@@ -1,5 +1,4 @@
-const db = require('./db')
-const textFormats = require('../view/textFormats')
+const textFormats = require('../../view/textFormats')
 
 function generateUserForm(action, method, buttonLabel, signin = false) {
     if (signin === false) {
@@ -49,12 +48,6 @@ function generateUserForm(action, method, buttonLabel, signin = false) {
     `
 }
 
-function generateUserLogoutMessage() {
-    return textFormats.displayParagraphFormat(`You logged out successfully
-    ${textFormats.setTextLink(`Play Again`, "http://localhost:3000/")}`)
-}
-
 module.exports = {
     generateUserForm,
-    generateUserLogoutMessage,
 }

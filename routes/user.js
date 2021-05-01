@@ -4,15 +4,16 @@ const userRouter = express.Router()
 userRouter.use(express.urlencoded({ extended: true }))
 userRouter.use(express.json())
 
+const form = require('../components/forms/userForm')
+const message = require('../components/messages/logoutMessage')
 const userMiddleware = require('../middleware/user')
-const users = require('../model/users')
 const scores = require('../model/scores')
 const accusations = require('../model/accusations')
 
 userRouter.get('/', async (request, response) => {
     accusations.resetAccuseAttemptCount()
     try {
-        response.send(users.generateUserForm("http://localhost:3000/", "post", "Register", signin = true))
+        response.send(form.generateUserForm("http://localhost:3000/", "post", "Register", signin = true))
     }
     catch (error) {
         console.log(error)
@@ -32,7 +33,7 @@ userRouter.post('/', userMiddleware.checkDuplicateUsername, userMiddleware.regis
 
 userRouter.get('/signin', async (request, response) => {
     try {
-        response.send(users.generateUserForm("http://localhost:3000/signin", "post", "Sign in"))
+        response.send(form.generateUserForm("http://localhost:3000/signin", "post", "Sign in"))
     }
     catch {
         console.log(error)
@@ -53,7 +54,7 @@ userRouter.post('/signin', userMiddleware.signInUser, async (request, response) 
 userRouter.get('/save-logout', async (request, response) => {
     try {
         await scores.updateUserScore(request, response, accusations.getAccuseAttemptCount(), reset = false)
-        response.send(users.generateUserLogoutMessage())
+        response.send(message.generateUserLogoutMessage())
     }
     catch (error) {
         console.log(error)
@@ -64,7 +65,7 @@ userRouter.get('/save-logout', async (request, response) => {
 userRouter.get('/quit-logout', async (request, response) => {
     try {
         await scores.updateUserScore(request, response, accusations.getAccuseAttemptCount(), reset = true)
-        response.send(users.generateUserLogoutMessage())
+        response.send(message.generateUserLogoutMessage())
     }
     catch (error) {
         console.log(error)
