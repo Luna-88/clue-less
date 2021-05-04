@@ -1,9 +1,7 @@
 const express = require('express')
 const roomRouter = express.Router()
 
-const db = require('../model/db')
 const rooms = require('../model/rooms')
-const components = require('../components/displays/roomGridDisplay')
 const textFormats = require('../view/textFormats')
 const questionRouter = require('./question').questionRouter
 
@@ -11,8 +9,7 @@ roomRouter.use('/:roomId/questions', questionRouter) //Nesting routes
 
 roomRouter.get('/', async (request, response) => {
     try {
-        const displayRoomGrid = await components.displayRoomGrid()
-        response.send(textFormats.displayGameTitle() + displayRoomGrid)
+        response.send(textFormats.displayGameTitle() + await rooms.getRoomList())
     }
     catch (error) {
         console.log(error)
@@ -21,16 +18,8 @@ roomRouter.get('/', async (request, response) => {
 })
 
 roomRouter.get('/:roomId', async (request, response) => {
-    const roomId = request.params.roomId
     try {
-        db.getCollection('rooms').then((room) => {
-            return room.findOne({
-                room: roomId
-            })
-                .then((result) => {
-                    response.send(rooms.inspectRooms(result))
-                })
-        })
+        response.send(await rooms.inspectRooms(request))
     }
     catch (error) {
         console.log(error)

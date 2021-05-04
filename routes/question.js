@@ -4,13 +4,12 @@ questionRouter.use(express.urlencoded({ extended: true }))
 questionRouter.use(express.json())
 
 const answers = require('../model/answers')
-const components = require('../components/forms/questionForm')
+const questions = require('../model/questions')
 
 questionRouter.get('/', async (request, response) => {
     const roomId = request.params.roomId
     try {
-        const questionForm = await components.generateQuestionForm(roomId)
-        response.send(questionForm)
+        response.send(await questions.generateQuestionForm(roomId))
     }
     catch (error) {
         console.log(error)
@@ -34,8 +33,7 @@ questionRouter.get('/:questionId', async (request, response) => {
     const roomId = request.params.roomId
     const questionId = request.params.questionId
     try {
-        const generateAnswerDisplay = await answers.generateAnswerDisplay(roomId, questionId)
-        response.send(generateAnswerDisplay)
+        response.send(await answers.generateAnswerDisplay(roomId, questionId))
     }
     catch (error) {
         console.log(error)

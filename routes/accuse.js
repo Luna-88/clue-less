@@ -8,8 +8,7 @@ const components = require('../components/forms/accusationForm')
 
 accuseRouter.get('/', async (request, response) => {
     try {
-        const accusedForm = await components.generateAccusationForm()
-        response.send(accusedForm)
+        response.send(await components.generateAccusationForm())
     }
     catch (error) {
         console.log(error)

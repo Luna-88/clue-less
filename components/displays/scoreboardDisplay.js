@@ -1,4 +1,3 @@
-const scores = require('../../model/scores')
 const textFormats = require('../../view/textFormats')
 
 function displayUserScores(username, accuseCount) {
@@ -9,19 +8,17 @@ function displayUserScores(username, accuseCount) {
     </tr>`
 }
 
-async function generateScoreboard(request, response, accuseAttemptCount,) {
-    let userScoreList = []
-    const usersCollection = await scores.updateUserScore(request, response, accuseAttemptCount, reset = false)
-    await usersCollection.find({ "accuseCount": { $gte: 1, $lte: 10 } })
-        .project({ "_id": 0 })
-        .sort({ "accuseCount": 1 })
-        .forEach(document => userScoreList
-            .push(displayUserScores(document.username, document.accuseCount)))
+function displayScoreboard(userScoreList) {
     return `
     <head>
     <style>
+        body {
+            font-family: system-ui;
+            font-size: 26px;
+            text-align: left;
+            margin: 30px;
+        }
         #users {
-            font-family: futura;
             text-align: center;
             border-collapse: collapse;
             width: 100%;
@@ -30,8 +27,12 @@ async function generateScoreboard(request, response, accuseAttemptCount,) {
             border: 1px solid #ddd;
             padding: 8px;
         }
-        #users tr:nth-child(even) {background-color: white;}
-        #users tr:hover {background-color: #ddd;}
+        #users tr:nth-child(even) {
+            background-color: white;
+        }
+        #users tr:hover {
+            background-color: #ddd;
+        }
         #users th {
             padding-top: 12px;
             padding-bottom: 12px;
@@ -45,6 +46,10 @@ async function generateScoreboard(request, response, accuseAttemptCount,) {
             bottom: 0;
             width: 100%;
         }
+        .quit {
+            padding: 10px; 
+            float: right;
+        }
     </style>
     </head>
     <body>
@@ -56,7 +61,7 @@ async function generateScoreboard(request, response, accuseAttemptCount,) {
         ${userScoreList.join('')}
         </table>
         <footer>
-        <p class="quit" style="font-family:futura; font-size:30px; padding:10px; float:right">
+        <p class="quit">
             ${textFormats.setTextLink("Quit", "http://localhost:3000/quit-logout")}
         </p>
     </footer>
@@ -65,5 +70,6 @@ async function generateScoreboard(request, response, accuseAttemptCount,) {
 }
 
 module.exports = {
-    generateScoreboard,
+    displayUserScores,
+    displayScoreboard,
 }

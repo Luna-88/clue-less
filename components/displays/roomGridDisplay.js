@@ -1,20 +1,15 @@
 const textFormats = require('../../view/textFormats')
-const db = require('../../model/db')
 
-async function displayRoomGrid() {
-    let roomList = []
-    const roomsCollection = await db.getCollection('rooms')
-    await roomsCollection.find({})
-        .project({ "_id": 0 })
-        .forEach(document => roomList
-            .push(`
-            <div class="grid-item">
-                ${textFormats.displayParagraphFormat(textFormats.setTextLink(textFormats.skipEmptyValues(document.room), `/rooms/${document.room}`))}
-            </div>
-            `))
+function displayRoomGrid(roomList) {
     return `
     <head>
     <style>
+        body {
+            font-family: system-ui;
+            font-size: 26px;
+            text-align: left;
+            margin: 30px;
+        }
         .grid-container {
             display: grid;
             grid-template-columns: auto auto auto;
@@ -43,17 +38,17 @@ async function displayRoomGrid() {
     <div class="grid-container">
         ${roomList.join('')}
     </div>
-    </body>
     <div class="footer">
-    <footer>
-        <p class="quit" style="font-family:futura; font-size:30px; padding:10px; float:right">
-            ${textFormats.setTextLink("Quit", "http://localhost:3000/quit-logout")}
-        </p>
-        <p class="save" style="font-family:futura; font-size:30px; padding:10px; float:left">
-            ${textFormats.setTextLink("Save and Quit", "http://localhost:3000/save-logout")}
-        </p>
-    </footer>
+        <footer>
+            <p class="quit" style="padding: 10px; float: right">
+                ${textFormats.setTextLink("Quit", "http://localhost:3000/quit-logout")}
+            </p>
+            <p class="save" style="padding: 10px; float: left">
+                ${textFormats.setTextLink("Save and Quit", "http://localhost:3000/save-logout")}
+            </p>
+        </footer>
     </div>
+    </body>
     `
 }
 
