@@ -15,7 +15,7 @@ app.use('/rooms', routes)
 app.use('/accuse', accuse)
 app.use('/score', score)
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 9000;
 
 app.listen(PORT, function () {
     console.log(`http://localhost:${PORT}`)

@@ -1,0 +1,50 @@
+body {
+  font-family: system-ui;
+  font-size: 26px;
+  text-align: left;
+  margin: 30px;
+}
+
+.game-title h1 {
+  font-weight: bolder; 
+  font-size: 50px; 
+  color: blue; 
+  text-align: center;
+}
+
+.register-text {
+  text-align: center;
+}
+
+.user-form {
+  margin: auto;
+  width: 268px;
+  border: 3px solid grey;
+  padding: 10px;
+}
+
+.user-input {
+  height: 40px; 
+  width: 250px;
+  font-size: 20px;
+}
+
+.user-button {
+  text-align: center;
+}
+
+.user-button-input { 
+  margin: 10px; 
+  height: 40px;
+  width: 110px; 
+  font-size: 20px;
+}
+
+#show-password {
+  font-size: 18px;
+}
+
+.already-registered p {
+  margin: 0;
+  font-size: 18px;
+}
