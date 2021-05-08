@@ -1,9 +1,16 @@
-import { useHistory } from 'react-router-dom'
 import GameTitle from './GameTitle'
 import AlreadyRegistered from './AlreadyRegistered'
 
-export default function UserForm() {
-    const history = useHistory()
+export default function UserForm({ actionForm, methodForm = "post", isRegistered = true }) {
+    let signInDiv = ""
+    let option = ""
+    if (!isRegistered) {
+        signInDiv = <AlreadyRegistered />
+        option = "register"
+    } else {
+        signInDiv = ""
+        option = "sign in"
+    }
     function showPassword() {
         let x = document.getElementById("password")
         if (x.type === "password") {
@@ -12,15 +19,12 @@ export default function UserForm() {
             x.type = "password"
         }
     }
-    function handleClick() {
-        history.push("/signin")
-    }
     return (
         <div>
             <GameTitle />
-            <p className="register-text" >Please, register to play</p>
+            <p className="register-text" >Please, {option} to play</p>
             <div className="user-form">
-                <form>
+                <form action={actionForm} method={methodForm}>
                     <label htmlFor="username">Username:</label><br />
                     <input
                         className="user-input"
@@ -46,13 +50,13 @@ export default function UserForm() {
                     />
                     <label id="show-password" htmlFor="checkbox">Show Password</label>
                     <div className="user-button">
-                        <button
+                        <input
                             className="user-button-input"
                             type="submit"
-                            onClick={handleClick}>Submit
-                    </button>
+                            value={option}>
+                        </input>
                     </div>
-                    <AlreadyRegistered />
+                    {signInDiv}
                 </form>
             </div>
         </div>

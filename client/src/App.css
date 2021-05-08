@@ -48,3 +48,10 @@ body {
   margin: 0;
   font-size: 18px;
 }
+
+.intro-message {
+  font-family: system-ui;
+  font-size: 26px;
+  text-align: justify;
+  margin: 30px;
+}
