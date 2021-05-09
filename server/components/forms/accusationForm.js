@@ -1,5 +1,5 @@
 const textFormats = require('../../view/textFormats')
-const accusations = require('../../model/accusations')
+const accusations = require('../../models/accusations')
 
 async function getAccusationSelects(option, label) {
     const options = await accusations.getAccusationOptions(option)

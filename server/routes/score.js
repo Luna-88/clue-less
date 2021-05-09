@@ -5,8 +5,8 @@ scoreRouter.use('/score/scoreboard', scoreboardRouter)
 scoreRouter.use(express.urlencoded({ extended: true }))
 scoreRouter.use(express.json())
 
-const scores = require('../model/scores')
-const accusations = require('../model/accusations')
+const scores = require('../models/scores')
+const accusations = require('../models/accusations')
 const tokenMiddleware = require('../middleware/token')
 
 scoreRouter.get('/', tokenMiddleware.verifyAccessToken, async (request, response) => {

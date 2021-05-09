@@ -4,8 +4,8 @@ const logoutRouter = express.Router()
 logoutRouter.use(express.urlencoded({ extended: true }))
 logoutRouter.use(express.json())
 
-const scores = require('../model/scores')
-const accusations = require('../model/accusations')
+const scores = require('../models/scores')
+const accusations = require('../models/accusations')
 
 logoutRouter.get('/save-logout', async (request, response) => {
     try {

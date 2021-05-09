@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs')
 
-const db = require('../model/db')
+const db = require('../models/db')
 
 async function checkDuplicateUsername(request, response, next) {
     const usersCollection = await db.getCollection('users')

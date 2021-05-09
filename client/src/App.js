@@ -1,7 +1,9 @@
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import './App.css'
 import UserForm from './components/UserForm'
 import IntroMessage from './components/IntroMessage'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import Rooms from './components/Rooms'
+import RoomInspection from './components/RoomInspection'
 
 export default function App() {
   return (
@@ -10,17 +12,25 @@ export default function App() {
         <Switch>
           <Route exact path="/">
             <UserForm
-              actionForm="http://localhost:3000/signIn"
+              actionForm="/signIn"
               isRegistered={false}
             />
           </Route>
           <Route exact path="/signIn">
             <UserForm
-              actionForm="http://localhost:3000/intro"
+              actionForm="/intro"
             />
           </Route>
           <Route exact path="/intro">
             <IntroMessage />
+          </Route>
+          <Route exact path="/rooms">
+            <Rooms />
+          </Route>
+          <Route exact path="/rooms">
+            <Route exact path="/:roomId">
+              <RoomInspection />
+            </Route>
           </Route>
         </Switch>
       </BrowserRouter>
