@@ -32,7 +32,6 @@ export default function Room() {
         }
         getRooms()
     }, [])
-
     return (
         <div>
             <GameTitle />
@@ -47,12 +46,9 @@ export default function Room() {
             </div>
             <div className="room-footer">
                 <footer>
-                    <p className="quit">
-                        <a href="http://localhost:3000/quit-logout">Quit</a>
-                    </p>
-                    <p className="save">
-                        <a href="http://localhost:3000/save-logout">Save and Quit</a>
-                    </p>
+                    <a className="quit" href="http://localhost:3000/quit-logout">Quit</a>
+                    <a className="save" href="http://localhost:3000/save-logout">Save and Quit</a>
+                    <a href="http://localhost:3000/accuse">Accuse</a>
                 </footer>
             </div>
         </div >

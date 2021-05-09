@@ -12,7 +12,7 @@ roomRouter.get('/', async (request, response) => {
     }
     catch (error) {
         console.log(error)
-        response.status(404).send(`Private room, please go back`)
+        response.status(404).send('Private room, please go back')
     }
 })
 
@@ -22,7 +22,7 @@ roomRouter.get('/:roomId', async (request, response) => {
     }
     catch (error) {
         console.log(error)
-        response.status(404).send(`Private room, please go back`)
+        response.status(404).send('Private room, please go back')
     }
 })
 

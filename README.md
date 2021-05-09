@@ -1,14 +1,14 @@
-## clue-less
+# clue-less
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-# Server Folder
+## Server Folder
 Getting started:
 ```.js
 npm install
 npm start
 ```
-# Client Folder
+## Client Folder
 ```.js
 npm install
 npm start
