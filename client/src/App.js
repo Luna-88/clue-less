@@ -3,7 +3,9 @@ import './App.css'
 import UserForm from './components/UserForm'
 import IntroMessage from './components/IntroMessage'
 import Rooms from './components/Rooms'
-import RoomInspection from './components/RoomInspection'
+import AccusationForm from './components/AccusationForm'
+import WinnerMessage from './components/WinnerMessage'
+import LogoutMessage from './components/LogoutMessage'
 
 export default function App() {
   return (
@@ -27,10 +29,17 @@ export default function App() {
           <Route exact path="/rooms">
             <Rooms />
           </Route>
-          <Route exact path="/rooms">
-            <Route exact path="/:roomId">
-              <RoomInspection />
-            </Route>
+          <Route exact path="/accuse">
+              <AccusationForm />
+          </Route>
+          <Route exact path="/score">
+              <WinnerMessage />
+          </Route>
+          <Route exact path="/save-logout">
+              <LogoutMessage />
+          </Route>
+          <Route exact path="/quit-logout">
+              <LogoutMessage />
           </Route>
         </Switch>
       </BrowserRouter>

@@ -109,3 +109,36 @@ body {
   float: left;
   padding: 10px;
 }
+
+.accuse-form {
+  margin: auto;
+  width: 345px;
+  border: 3px solid grey;
+  padding: 10px;
+}
+
+.accuse-options {
+  padding: 5px
+}
+
+.accuse-selects {
+  height: 40px; 
+  width: 250px; 
+  font-size: 0.8vw;
+}
+
+.accuse-button { 
+  text-align: center; 
+}
+
+.accuse-button-input { 
+  text-align: center; 
+  margin: 10px; 
+  height: 40px;
+  width: 90px; 
+  font-size: 20px;
+}
+
+.winner-message {
+  text-align: justify;
+}

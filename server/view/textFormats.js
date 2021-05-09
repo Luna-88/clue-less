@@ -31,12 +31,8 @@ function setTitleCase(text) {
 function skipEmptyValues(text) {
     if (text.length > 0) {
         const modifiedText = setTitleCase(text.replace("-", " "))
-        return `
-        <option value="${text}">${modifiedText}</option>
-        `
-    } else {
-        return text = null
-    }
+        return modifiedText
+     }
 
 }
 

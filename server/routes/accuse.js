@@ -4,30 +4,29 @@ accuseRouter.use(express.urlencoded({ extended: true }))
 accuseRouter.use(express.json())
 
 const accusations = require('../models/accusations')
-const components = require('../components/forms/accusationForm')
 
 accuseRouter.get('/', async (request, response) => {
-    try {
-        response.send(await components.generateAccusationForm())
+    try { 
+        response.json(await accusations.getAllAccusationOptions())
     }
     catch (error) {
         console.log(error)
-        response.status(404).send(`There was a problem with the accusation form`)
+        response.status(404).send('There was a problem with the accusation form')
     }
 }
 )
 
-accuseRouter.post('/', async (request, response) => {
-    const selectedAccuseOptions = request.body
-    try {
-        await accusations.addAccusations(selectedAccuseOptions)
-        response.redirect("http://localhost:3000/score")
-    }
-    catch (error) {
-        console.log(error)
-        response.status(404).send(`There was a problem submitting your accusation`)
-    }
-})
+// accuseRouter.post('/', async (request, response) => {
+//     const selectedAccuseOptions = request.body
+//     try {
+//         await accusations.addAccusations(selectedAccuseOptions)
+//         response.redirect("http://localhost:3000/score")
+//     }
+//     catch (error) {
+//         console.log(error)
+//         response.status(404).send(`There was a problem submitting your accusation`)
+//     }
+// })
 
 module.exports = {
     accuseRouter,
