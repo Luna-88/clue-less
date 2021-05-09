@@ -3,8 +3,8 @@ const questionRouter = express.Router({ mergeParams: true })
 questionRouter.use(express.urlencoded({ extended: true }))
 questionRouter.use(express.json())
 
-const answers = require('../model/answers')
-const questions = require('../model/questions')
+const answers = require('../models/answers')
+const questions = require('../models/questions')
 
 questionRouter.get('/', async (request, response) => {
     const roomId = request.params.roomId
