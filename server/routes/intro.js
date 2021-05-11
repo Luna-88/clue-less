@@ -1,9 +1,7 @@
 const express = require('express')
 const introRouter = express.Router()
 
-const userMiddleware = require('../middleware/signInUser')
-
-introRouter.post('/', userMiddleware.signInUser, async (request, response) => {
+introRouter.post('/', async (request, response) => {
     try {
         response.json({ message: "Signed in successfully" })
     }

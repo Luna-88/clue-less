@@ -4,11 +4,22 @@ const userRouter = express.Router()
 userRouter.use(express.urlencoded({ extended: true }))
 userRouter.use(express.json())
 
-const userMiddleware = require('../middleware/registerUser')
+const registerMiddleware = require('../middleware/registerUser')
+const signInMiddleware = require('../middleware/signInUser')
 
-userRouter.post('/signIn', userMiddleware.checkDuplicateUsername, userMiddleware.registerUser, async (request, response) => {
+userRouter.post('/register', registerMiddleware.checkDuplicateUsername, registerMiddleware.registerUser, async (request, response) => {
     try {
         response.json({ message: "Registered successfully!" })
+    }
+    catch (error) {
+        console.log(error)
+        response.status(404).send("There was a problem registering your information")
+    }
+})
+
+userRouter.post('/signIn', signInMiddleware.signInUser, async (request, response) => {
+    try {
+        response.json({ message: "Signed in successfully" })
     }
     catch (error) {
         console.log(error)

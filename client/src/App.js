@@ -14,13 +14,13 @@ export default function App() {
         <Switch>
           <Route exact path="/">
             <UserForm
-              actionForm="/signIn"
               isRegistered={false}
+              api='/api/register'
             />
           </Route>
           <Route exact path="/signIn">
             <UserForm
-              actionForm="/intro"
+              api='/api/signIn'
             />
           </Route>
           <Route exact path="/intro">
@@ -30,16 +30,16 @@ export default function App() {
             <Rooms />
           </Route>
           <Route exact path="/accuse">
-              <AccusationForm />
+            <AccusationForm />
           </Route>
           <Route exact path="/score">
-              <WinnerMessage />
+            <WinnerMessage />
           </Route>
           <Route exact path="/save-logout">
-              <LogoutMessage />
+            <LogoutMessage />
           </Route>
           <Route exact path="/quit-logout">
-              <LogoutMessage />
+            <LogoutMessage />
           </Route>
         </Switch>
       </BrowserRouter>
