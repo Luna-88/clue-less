@@ -26,12 +26,13 @@ export default function Room() {
     const [rooms, setRooms] = useState([])
     useEffect(() => {
         const getRooms = async () => {
-            let response = await fetch('/rooms')
+            let response = await fetch('/api/rooms')
             let roomList = await response.json()
             setRooms(roomList)
         }
         getRooms()
     }, [])
+    console.log("rooms",rooms)
     return (
         <div>
             <GameTitle />

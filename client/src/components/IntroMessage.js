@@ -17,7 +17,7 @@ export default function IntroMessage() {
                 <p>
                     As a detective, it is your job to head to Dr Black’s mansion and find out: Who killed him? What weapon did they use? And where did it happen?
             </p>
-                <a href="http://localhost:3000/rooms">Pick a room</a>
+                <a href="/rooms">Go to rooms</a>
             </div>
         </div>
 
